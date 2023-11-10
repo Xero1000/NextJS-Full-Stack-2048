@@ -1,8 +1,8 @@
 "use client";
-import { Box, Grid } from "@radix-ui/themes";
+import { Grid } from "@radix-ui/themes";
 import React, { useState } from "react";
-import EmptyTile from "./EmptyTile";
 import Tile from "./Tile";
+import TileContainer from "./TileContainer";
 
 const GameBoard = () => {
   const [boardData, setBoardData] = useState([
@@ -20,12 +20,11 @@ const GameBoard = () => {
     >
       {boardData.map((row, rowIndex) => (
           row.map((col, colIndex) => (
-            <Box key={colIndex} className="relative" width="100%" height="100%">
-              <EmptyTile />
+            <TileContainer key={colIndex}>
               {col !== 0 && (
                 <Tile value={col} position={[rowIndex, colIndex]} zIndex={10} />
               )}
-            </Box>
+            </TileContainer>
           ))
       ))}
     </Grid>

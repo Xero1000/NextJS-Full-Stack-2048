@@ -10,7 +10,7 @@ interface Props {
 
 const Tile = ({value, position, zIndex}: Props) => {
   return (
-    <Flex className={`border-2 border-black absolute z-10 top-0 ${styles.tile}`} justify="center" align="center" width="100%" height="100%">
+    <Flex className={`absolute z-10 top-0 ${styles.tile}`} justify="center" align="center" width="100%" height="100%">
         {value}
     </Flex>
   )
