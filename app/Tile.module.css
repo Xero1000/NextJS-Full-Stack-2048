@@ -1,0 +1,9 @@
+.tile {
+    font-size: 32px;
+}
+
+@media screen and (max-width: 620px) {
+    .tile {
+        font-size: 5vw
+    }
+}
