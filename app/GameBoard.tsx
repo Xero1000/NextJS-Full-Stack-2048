@@ -30,6 +30,10 @@ const GameBoard = () => {
                 newBoard[i][k] = newBoard[i][k + 1];
                 newBoard[i][k + 1] = 0;
               }
+              else if (newBoard[i][k] === newBoard[i][k + 1]) {
+                newBoard[i][k] *= 2
+                newBoard[i][k + 1] = 0
+              }
             }
           }
         }
