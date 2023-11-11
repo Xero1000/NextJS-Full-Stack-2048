@@ -19,6 +19,25 @@ const GameBoard = () => {
     setBoardData(newBoard);
   };
 
+  const moveLeft = () => {
+    setBoardData((currentBoard) => {
+      let newBoard = currentBoard.map((row) => [...row]);
+      for (let i = 0; i < 4; i++) {
+        for (let j = 1; j < 4; j++) {
+          if (newBoard[i][j] !== 0) {
+            for (let k = j - 1; k >= 0; k--) {
+              if (newBoard[i][k] === 0) {
+                newBoard[i][k] = newBoard[i][k + 1];
+                newBoard[i][k + 1] = 0;
+              }
+            }
+          }
+        }
+      }
+      return newBoard
+    })
+  };
+
   useEffect(() => {
     initializeBoard();
   }, []);
@@ -26,26 +45,26 @@ const GameBoard = () => {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       switch (e.key) {
-        case 'w':
-          console.log('w')
+        case "w":
+          console.log("w");
           break;
-        case 'a':
-          console.log('a')
+        case "a":
+          moveLeft();
           break;
-        case 's':
-          console.log('s')
+        case "s":
+          console.log("s");
           break;
-        case 'd':
-          console.log('d')
+        case "d":
+          console.log("d");
           break;
       }
-    }
+    };
 
-    window.addEventListener('keydown', handleKeyPress)
+    window.addEventListener("keydown", handleKeyPress);
     return () => {
-      window.removeEventListener('keydown', handleKeyPress)
-    }
-  }, [])
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
 
   return (
     <Grid
