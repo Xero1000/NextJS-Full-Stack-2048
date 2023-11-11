@@ -23,6 +23,30 @@ const GameBoard = () => {
     initializeBoard();
   }, []);
 
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case 'w':
+          console.log('w')
+          break;
+        case 'a':
+          console.log('a')
+          break;
+        case 's':
+          console.log('s')
+          break;
+        case 'd':
+          console.log('d')
+          break;
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [])
+
   return (
     <Grid
       columns="4"

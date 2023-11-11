@@ -1,3 +1,4 @@
+
 const generateTile = (currentBoard: number[][]) => {
     let newBoard = currentBoard.map((row) => [...row]);
     let emptySpaces: { rowIndex: number; colIndex: number }[] = [];
@@ -13,7 +14,7 @@ const generateTile = (currentBoard: number[][]) => {
     if (emptySpaces.length) {
       const emptySpaceIndex = Math.floor(Math.random() * emptySpaces.length);
       const { rowIndex, colIndex } = emptySpaces[emptySpaceIndex];
-      newBoard[rowIndex][colIndex] = Math.random() > 0.1 ? 2 : 4;
+      newBoard[rowIndex][colIndex] = Math.random() > 0.1 ? 2 : 4; // 90% change tile will have a 2, 10% it'll be a 4
     }
 
     return newBoard;
