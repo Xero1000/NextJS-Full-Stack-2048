@@ -13,14 +13,36 @@ const GameBoard = () => {
     [0, 0, 0, 0],
   ]);
 
+  // previous state of the board
+  const [prevBoardData, setPrevBoardData] = useState(boardData)
+
+  // variable to track if a move was made
+  const [moveMade, setMoveMade] = useState(false)
+
+  // Runs generateTile twice upon startup
   const initializeBoard = () => {
     let newBoard = generateTile(boardData);
     newBoard = generateTile(newBoard);
     setBoardData(newBoard);
   };
 
+  // checks if the board has changed as a result of a move made
+  const checkBoardChange = () => {
+    for (let r = 0; r < 4; r++) {
+      for (let c = 0; c < 4; c++) {
+        if (boardData[r][c] !== prevBoardData[r][c])
+          return true
+      }
+    }
+    return false
+  }
+
   const moveLeft = () => {
+    // use functional update to ensure the most current board
+    // state is used
     setBoardData((currentBoard) => {
+      setPrevBoardData(currentBoard) // save board state prior to change
+
       let newBoard = currentBoard.map((row) => [...row]);
       for (let r = 0; r < 4; r++) {
         for (let c = 1; c < 4; c++) {
@@ -37,12 +59,14 @@ const GameBoard = () => {
           }
         }
       }
+      setMoveMade(true)
       return newBoard;
     });
   };
 
   const moveRight = () => {
     setBoardData((currentBoard) => {
+      setPrevBoardData(currentBoard)
       let newBoard = currentBoard.map((row) => [...row]);
       for (let r = 0; r < 4; r++) {
         for (let c = 2; c >= 0; c--) {
@@ -59,12 +83,14 @@ const GameBoard = () => {
           }
         }
       }
+      setMoveMade(true)
       return newBoard;
     });
   };
 
   const moveDown = () => {
     setBoardData((currentBoard) => {
+      setPrevBoardData(currentBoard)
       let newBoard = currentBoard.map((row) => [...row]);
       for (let c = 0; c < 4; c++) {
         for (let r = 2; r >= 0; r--) {
@@ -81,12 +107,14 @@ const GameBoard = () => {
           }
         }
       }
+      setMoveMade(true)
       return newBoard;
     });
   };
 
   const moveUp = () => {
     setBoardData((currentBoard) => {
+      setPrevBoardData(currentBoard)
       let newBoard = currentBoard.map((row) => [...row]);
       for (let c = 0; c < 4; c++) {
         for (let r = 1; r < 4; r++) {
@@ -103,27 +131,31 @@ const GameBoard = () => {
           }
         }
       }
+      setMoveMade(true)
       return newBoard;
     });
   };
 
+  // board is initialized with two tiles upon startup
   useEffect(() => {
     initializeBoard();
   }, []);
 
+  // 
   useEffect(() => {
+
     const handleKeyPress = (e: KeyboardEvent) => {
       switch (e.key) {
-        case "w":
+        case "w": // pressing 'w' will move tiles up
           moveUp();
           break;
-        case "a":
+        case "a": // pressing 'a' will move tiles left
           moveLeft();
           break;
-        case "s":
+        case "s": // pressing 's' will move tiles down
           moveDown();
           break;
-        case "d":
+        case "d": // pressing 'd' will move tiles right
           moveRight();
           break;
         default:
@@ -131,11 +163,27 @@ const GameBoard = () => {
       }
     };
 
+    // event listener for keydown event
     window.addEventListener("keydown", handleKeyPress);
+
+    // cleanup function to remove event listener
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
+
+  // When a move is made, if the board changed at all from the
+  // previous board state, a new tile will be generated 
+  // in an empty random tile.
+  useEffect(() => {
+    if (moveMade) {
+      if (checkBoardChange()) {
+        const newBoard = generateTile(boardData)
+        setBoardData(newBoard)
+      }
+      setMoveMade(false)
+    }
+  }, [moveMade])
 
   return (
     <Grid
