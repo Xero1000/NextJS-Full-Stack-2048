@@ -29,17 +29,16 @@ const GameBoard = () => {
               if (newBoard[r][k] === 0) {
                 newBoard[r][k] = newBoard[r][k + 1];
                 newBoard[r][k + 1] = 0;
-              }
-              else if (newBoard[r][k] === newBoard[r][k + 1]) {
-                newBoard[r][k] *= 2
-                newBoard[r][k + 1] = 0
+              } else if (newBoard[r][k] === newBoard[r][k + 1]) {
+                newBoard[r][k] *= 2;
+                newBoard[r][k + 1] = 0;
               }
             }
           }
         }
       }
-      return newBoard
-    })
+      return newBoard;
+    });
   };
 
   const moveRight = () => {
@@ -52,17 +51,16 @@ const GameBoard = () => {
               if (newBoard[r][k] === 0) {
                 newBoard[r][k] = newBoard[r][k - 1];
                 newBoard[r][k - 1] = 0;
-              }
-              else if (newBoard[r][k] === newBoard[r][k - 1]) {
-                newBoard[r][k] *= 2
-                newBoard[r][k - 1] = 0
+              } else if (newBoard[r][k] === newBoard[r][k - 1]) {
+                newBoard[r][k] *= 2;
+                newBoard[r][k - 1] = 0;
               }
             }
           }
         }
       }
-      return newBoard
-    })
+      return newBoard;
+    });
   };
 
   const moveDown = () => {
@@ -75,20 +73,39 @@ const GameBoard = () => {
               if (newBoard[k][c] === 0) {
                 newBoard[k][c] = newBoard[k - 1][c];
                 newBoard[k - 1][c] = 0;
-              }
-              else if (newBoard[k][c] === newBoard[k - 1][c]) {
-                newBoard[k][c] *= 2
-                newBoard[k - 1][c] = 0
+              } else if (newBoard[k][c] === newBoard[k - 1][c]) {
+                newBoard[k][c] *= 2;
+                newBoard[k - 1][c] = 0;
               }
             }
           }
         }
       }
-      return newBoard
-    })
+      return newBoard;
+    });
   };
 
-  
+  const moveUp = () => {
+    setBoardData((currentBoard) => {
+      let newBoard = currentBoard.map((row) => [...row]);
+      for (let c = 0; c < 4; c++) {
+        for (let r = 1; r < 4; r++) {
+          if (newBoard[r][c] !== 0) {
+            for (let k = r - 1; k >= 0; k--) {
+              if (newBoard[k][c] === 0) {
+                newBoard[k][c] = newBoard[k + 1][c];
+                newBoard[k + 1][c] = 0;
+              } else if (newBoard[k][c] === newBoard[k + 1][c]) {
+                newBoard[k][c] *= 2;
+                newBoard[k + 1][c] = 0;
+              }
+            }
+          }
+        }
+      }
+      return newBoard;
+    });
+  };
 
   useEffect(() => {
     initializeBoard();
@@ -98,16 +115,16 @@ const GameBoard = () => {
     const handleKeyPress = (e: KeyboardEvent) => {
       switch (e.key) {
         case "w":
-          console.log("w");
+          moveUp();
           break;
         case "a":
           moveLeft();
           break;
         case "s":
-          moveDown()
+          moveDown();
           break;
         case "d":
-          moveRight()
+          moveRight();
           break;
         default:
           break;
