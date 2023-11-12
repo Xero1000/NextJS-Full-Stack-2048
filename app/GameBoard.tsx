@@ -42,6 +42,29 @@ const GameBoard = () => {
     })
   };
 
+  const moveRight = () => {
+    setBoardData((currentBoard) => {
+      let newBoard = currentBoard.map((row) => [...row]);
+      for (let i = 0; i < 4; i++) {
+        for (let j = 2; j >= 0; j--) {
+          if (newBoard[i][j] !== 0) {
+            for (let k = j + 1; k < 4; k++) {
+              if (newBoard[i][k] === 0) {
+                newBoard[i][k] = newBoard[i][k - 1];
+                newBoard[i][k - 1] = 0;
+              }
+              else if (newBoard[i][k] === newBoard[i][k - 1]) {
+                newBoard[i][k] *= 2
+                newBoard[i][k - 1] = 0
+              }
+            }
+          }
+        }
+      }
+      return newBoard
+    })
+  };
+
   useEffect(() => {
     initializeBoard();
   }, []);
@@ -59,7 +82,9 @@ const GameBoard = () => {
           console.log("s");
           break;
         case "d":
-          console.log("d");
+          moveRight()
+          break;
+        default:
           break;
       }
     };
