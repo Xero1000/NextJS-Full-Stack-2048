@@ -7,8 +7,8 @@ import generateTile from "./utilities/generateTile";
 
 const GameBoard = () => {
   const [boardData, setBoardData] = useState([
-    [4, 4, 2, 2],
-    [2, 2, 2, 2],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
   ]);
@@ -48,12 +48,13 @@ const GameBoard = () => {
           if (newBoard[r][c] !== 0) {
             if (newBoard[r][c - 1] === 0) {
               let k = c - 1;
-              while (newBoard[r][k] === 0) {
+              while (k >= 0 && newBoard[r][k] === 0) {
+                console.log(k)
                 newBoard[r][k] = newBoard[r][k + 1];
                 newBoard[r][k + 1] = 0;
                 k--;
               }
-              if (newBoard[r][k] === newBoard[r][k + 1] && !tilesWithMerge.includes(k)) {
+              if (k >= 0 && newBoard[r][k] === newBoard[r][k + 1] && !tilesWithMerge.includes(k)) {
                 newBoard[r][k] = newBoard[r][k + 1] * 2;
                 newBoard[r][k + 1] = 0;
                 tilesWithMerge.push(k)
@@ -83,12 +84,12 @@ const GameBoard = () => {
           if (newBoard[r][c] !== 0) {
             if (newBoard[r][c + 1] === 0) {
               let k = c + 1;
-              while (newBoard[r][k] === 0) {
+              while (k < 4 && newBoard[r][k] === 0) {
                 newBoard[r][k] = newBoard[r][k - 1];
                 newBoard[r][k - 1] = 0;
                 k++;
               }
-              if (newBoard[r][k] === newBoard[r][k - 1] && !tilesWithMerge.includes(k)) {
+              if (k < 4 && newBoard[r][k] === newBoard[r][k - 1] && !tilesWithMerge.includes(k)) {
                 newBoard[r][k] = newBoard[r][k - 1] * 2;
                 newBoard[r][k - 1] = 0;
                 tilesWithMerge.push(k)
@@ -107,20 +108,32 @@ const GameBoard = () => {
   };
 
   const moveDown = () => {
+    // use functional update to ensure the most current board
+    // state is used
     setBoardData((currentBoard) => {
-      setPrevBoardData(currentBoard);
+      setPrevBoardData(currentBoard); // save board state prior to change
       let newBoard = currentBoard.map((row) => [...row]);
       for (let c = 0; c < 4; c++) {
+        let tilesWithMerge: number[] = []
         for (let r = 2; r >= 0; r--) {
           if (newBoard[r][c] !== 0) {
-            for (let k = r + 1; k < 4; k++) {
-              if (newBoard[k][c] === 0) {
+            if (newBoard[r + 1][c] === 0) {
+              let k = r + 1;
+              while (k < 4 && newBoard[k][c] === 0) {
+                console.log(k)
                 newBoard[k][c] = newBoard[k - 1][c];
                 newBoard[k - 1][c] = 0;
-              } else if (newBoard[k][c] === newBoard[k - 1][c]) {
-                newBoard[k][c] *= 2;
-                newBoard[k - 1][c] = 0;
+                k++;
               }
+              if (k < 4 && newBoard[k][c] === newBoard[k - 1][c] && !tilesWithMerge.includes(k)) {
+                newBoard[k][c] = newBoard[k - 1][c] * 2;
+                newBoard[k - 1][c] = 0;
+                tilesWithMerge.push(k)
+              }
+            } else if (newBoard[r + 1][c] === newBoard[r][c] && !tilesWithMerge.includes(r + 1)) {
+              newBoard[r + 1][c] *= 2;
+              newBoard[r][c] = 0;
+              tilesWithMerge.push(r + 1)
             }
           }
         }
@@ -131,20 +144,32 @@ const GameBoard = () => {
   };
 
   const moveUp = () => {
+    // use functional update to ensure the most current board
+    // state is used
     setBoardData((currentBoard) => {
-      setPrevBoardData(currentBoard);
+      setPrevBoardData(currentBoard); // save board state prior to change
       let newBoard = currentBoard.map((row) => [...row]);
       for (let c = 0; c < 4; c++) {
+        let tilesWithMerge: number[] = []
         for (let r = 1; r < 4; r++) {
           if (newBoard[r][c] !== 0) {
-            for (let k = r - 1; k >= 0; k--) {
-              if (newBoard[k][c] === 0) {
+            if (newBoard[r - 1][c] === 0) {
+              let k = r - 1;
+              while (k >= 0 && newBoard[k][c] === 0) {
+                console.log(k)
                 newBoard[k][c] = newBoard[k + 1][c];
                 newBoard[k + 1][c] = 0;
-              } else if (newBoard[k][c] === newBoard[k + 1][c]) {
-                newBoard[k][c] *= 2;
-                newBoard[k + 1][c] = 0;
+                k--;
               }
+              if (k >= 0 && newBoard[k][c] === newBoard[k + 1][c] && !tilesWithMerge.includes(k)) {
+                newBoard[k][c] = newBoard[k + 1][c] * 2;
+                newBoard[k + 1][c] = 0;
+                tilesWithMerge.push(k)
+              }
+            } else if (newBoard[r - 1][c] === newBoard[r][c] && !tilesWithMerge.includes(r - 1)) {
+              newBoard[r - 1][c] *= 2;
+              newBoard[r][c] = 0;
+              tilesWithMerge.push(r - 1)
             }
           }
         }
@@ -155,9 +180,9 @@ const GameBoard = () => {
   };
 
   // board is initialized with two tiles upon startup
-  // useEffect(() => {
-  //   initializeBoard();
-  // }, []);
+  useEffect(() => {
+    initializeBoard();
+  }, []);
 
   //
   useEffect(() => {
