@@ -49,7 +49,6 @@ const GameBoard = () => {
             if (newBoard[r][c - 1] === 0) {
               let k = c - 1;
               while (k >= 0 && newBoard[r][k] === 0) {
-                console.log(k)
                 newBoard[r][k] = newBoard[r][k + 1];
                 newBoard[r][k + 1] = 0;
                 k--;
@@ -120,7 +119,6 @@ const GameBoard = () => {
             if (newBoard[r + 1][c] === 0) {
               let k = r + 1;
               while (k < 4 && newBoard[k][c] === 0) {
-                console.log(k)
                 newBoard[k][c] = newBoard[k - 1][c];
                 newBoard[k - 1][c] = 0;
                 k++;
@@ -156,7 +154,6 @@ const GameBoard = () => {
             if (newBoard[r - 1][c] === 0) {
               let k = r - 1;
               while (k >= 0 && newBoard[k][c] === 0) {
-                console.log(k)
                 newBoard[k][c] = newBoard[k + 1][c];
                 newBoard[k + 1][c] = 0;
                 k--;
