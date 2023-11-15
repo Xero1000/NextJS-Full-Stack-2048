@@ -1,11 +1,14 @@
-"use client";
 import { Grid } from "@radix-ui/themes";
 import React, { useEffect, useState } from "react";
 import Tile from "./Tile";
 import TileContainer from "./TileContainer";
 import generateTile from "./utilities/generateTile";
 
-const GameBoard = () => {
+interface Props {
+  onScoreChange: (points: number) => void
+}
+
+const GameBoard = ({ onScoreChange }: Props) => {
   const [boardData, setBoardData] = useState([
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -18,6 +21,9 @@ const GameBoard = () => {
 
   // variable to track if a move was made
   const [moveMade, setMoveMade] = useState(false);
+
+  // state to track changes in score after each move
+  const [localScore, setLocalScore] = useState(0)
 
   // Runs generateTile twice upon startup
   const initializeBoard = () => {
@@ -37,6 +43,7 @@ const GameBoard = () => {
   };
 
   const moveLeft = () => {
+    let points = 0;
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
@@ -45,6 +52,7 @@ const GameBoard = () => {
       for (let r = 0; r < 4; r++) {
         let tilesWithMerge: number[] = []
         for (let c = 1; c < 4; c++) {
+          console.log(r, c)
           if (newBoard[r][c] !== 0) {
             if (newBoard[r][c - 1] === 0) {
               let k = c - 1;
@@ -54,24 +62,28 @@ const GameBoard = () => {
                 k--;
               }
               if (k >= 0 && newBoard[r][k] === newBoard[r][k + 1] && !tilesWithMerge.includes(k)) {
-                newBoard[r][k] = newBoard[r][k + 1] * 2;
+                newBoard[r][k] *= 2
                 newBoard[r][k + 1] = 0;
+                points += newBoard[r][k]
                 tilesWithMerge.push(k)
               }
             } else if (newBoard[r][c - 1] === newBoard[r][c] && !tilesWithMerge.includes(c - 1)) {
               newBoard[r][c - 1] *= 2;
               newBoard[r][c] = 0;
+              points += newBoard[r][c - 1]
               tilesWithMerge.push(c - 1)
             }
           }
         }
       }
+      setLocalScore((prevLocalScore) => prevLocalScore + points)
       setMoveMade(true);
       return newBoard;
     });
   };
 
   const moveRight = () => {
+    let points = 0;
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
@@ -89,24 +101,28 @@ const GameBoard = () => {
                 k++;
               }
               if (k < 4 && newBoard[r][k] === newBoard[r][k - 1] && !tilesWithMerge.includes(k)) {
-                newBoard[r][k] = newBoard[r][k - 1] * 2;
+                newBoard[r][k] *= 2;
                 newBoard[r][k - 1] = 0;
+                points += newBoard[r][k]
                 tilesWithMerge.push(k)
               }
             } else if (newBoard[r][c + 1] === newBoard[r][c] && !tilesWithMerge.includes(c + 1)) {
               newBoard[r][c + 1] *= 2;
               newBoard[r][c] = 0;
+              points += newBoard[r][c + 1]
               tilesWithMerge.push(c + 1)
             }
           }
         }
       }
       setMoveMade(true);
+      setLocalScore((prevLocalScore) => prevLocalScore + points)
       return newBoard;
     });
   };
 
   const moveDown = () => {
+    let points = 0;
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
@@ -124,24 +140,28 @@ const GameBoard = () => {
                 k++;
               }
               if (k < 4 && newBoard[k][c] === newBoard[k - 1][c] && !tilesWithMerge.includes(k)) {
-                newBoard[k][c] = newBoard[k - 1][c] * 2;
+                newBoard[k][c] *= 2;
                 newBoard[k - 1][c] = 0;
+                points += newBoard[k][c]
                 tilesWithMerge.push(k)
               }
             } else if (newBoard[r + 1][c] === newBoard[r][c] && !tilesWithMerge.includes(r + 1)) {
               newBoard[r + 1][c] *= 2;
               newBoard[r][c] = 0;
+              points += newBoard[r + 1][c]
               tilesWithMerge.push(r + 1)
             }
           }
         }
       }
       setMoveMade(true);
+      setLocalScore((prevLocalScore) => prevLocalScore + points)
       return newBoard;
     });
   };
 
   const moveUp = () => {
+    let points = 0;
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
@@ -159,19 +179,22 @@ const GameBoard = () => {
                 k--;
               }
               if (k >= 0 && newBoard[k][c] === newBoard[k + 1][c] && !tilesWithMerge.includes(k)) {
-                newBoard[k][c] = newBoard[k + 1][c] * 2;
+                newBoard[k][c] *= 2;
                 newBoard[k + 1][c] = 0;
+                points += newBoard[k][c]
                 tilesWithMerge.push(k)
               }
             } else if (newBoard[r - 1][c] === newBoard[r][c] && !tilesWithMerge.includes(r - 1)) {
               newBoard[r - 1][c] *= 2;
               newBoard[r][c] = 0;
+              points += newBoard[r - 1][c]
               tilesWithMerge.push(r - 1)
             }
           }
         }
       }
       setMoveMade(true);
+      setLocalScore((prevLocalScore) => prevLocalScore + points)
       return newBoard;
     });
   };
@@ -223,6 +246,14 @@ const GameBoard = () => {
       setMoveMade(false);
     }
   }, [moveMade]);
+
+  // useEffect to update the parent's component score after render phase
+  useEffect(() => {
+    if (localScore > 0) {
+      onScoreChange(localScore)
+      setLocalScore(0) // reset local score 
+    }
+  }, [localScore, onScoreChange])
 
   return (
     <Grid
