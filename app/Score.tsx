@@ -1,13 +1,15 @@
-import React from 'react'
+import React from "react";
 
 interface Props {
-    score: number
+  score: number;
 }
 
 const Score = ({ score }: Props) => {
   return (
-    <div>Score: { score }</div>
-  )
-}
+    <div className="border-2 border-black rounded-xl py-5 px-10 font-bold text-xl">
+      Score: {score}
+    </div>
+  );
+};
 
-export default Score
+export default Score;
