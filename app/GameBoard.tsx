@@ -6,9 +6,11 @@ import generateTile from "./utilities/generateTile";
 
 interface Props {
   onScoreChange: (points: number) => void
+  onWin: () => void
+  onLose: () => void
 }
 
-const GameBoard = ({ onScoreChange }: Props) => {
+const GameBoard = ({ onScoreChange, onWin, onLose }: Props) => {
   const [boardData, setBoardData] = useState([
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -24,12 +26,6 @@ const GameBoard = ({ onScoreChange }: Props) => {
 
   // state to track changes in score after each move
   const [localScore, setLocalScore] = useState(0)
-
-  // state to track if player has made 2048 tile
-  const [win, setWin] = useState(false)
-
-  // state to track if player has run out of moves
-  const [lose, setLose] = useState(false)
 
   // Runs generateTile twice upon startup
   const initializeBoard = () => {
@@ -47,10 +43,6 @@ const GameBoard = ({ onScoreChange }: Props) => {
     }
     return false;
   };
-
-  const handleWin = () => {
-    setWin(true)
-  }
 
   const moveLeft = () => {
     let points = 0;
@@ -249,7 +241,7 @@ const GameBoard = ({ onScoreChange }: Props) => {
   useEffect(() => {
     if (moveMade) {
       if (checkBoardChange()) {
-        const newBoard = generateTile(boardData, setLose);
+        const newBoard = generateTile(boardData, onLose);
         setBoardData(newBoard);
       }
       setMoveMade(false);
@@ -264,19 +256,6 @@ const GameBoard = ({ onScoreChange }: Props) => {
     }
   }, [localScore, onScoreChange])
 
-  // Check if a player has run out of moves
-  useEffect(() => {
-    if (lose) {
-      console.log("No moves left");
-    }
-  }, [lose]);
-
-  useEffect(() => {
-    if (win) {
-      console.log("Won the game")
-    }
-  }, [win])
-
   return (
     <Grid
       columns="4"
@@ -287,7 +266,7 @@ const GameBoard = ({ onScoreChange }: Props) => {
         row.map((col, colIndex) => (
           <TileContainer key={`${rowIndex}-${colIndex}`}>
             {col !== 0 && (
-              <Tile value={col} onWin={handleWin} />
+              <Tile value={col} onWin={onWin} />
             )}
           </TileContainer>
         ))

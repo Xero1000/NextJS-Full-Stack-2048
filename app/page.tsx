@@ -3,24 +3,49 @@ import { Button, Flex } from "@radix-ui/themes";
 import Image from "next/image";
 import GameBoard from "./GameBoard";
 import Score from "./Score";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [score, setScore] = useState(0)
-
   const updateScore = (points: number) => {
     setScore((prevScore) => prevScore + points)
   }
+
+  // state to track if player has made 2048 tile
+  const [win, setWin] = useState(false)
+  const handleWin = () => {
+    setWin(true)
+  }
+
+  // state to track if player has run out of moves
+  const [lose, setLose] = useState(false)
+  const handleLose = () => {
+    setLose(true)
+  }
+
+  // Check if a player has run out of moves
+  useEffect(() => {
+    if (lose) {
+      console.log("No moves left");
+    }
+  }, [lose]);
+
+  useEffect(() => {
+    if (win) {
+      console.log("Won the game")
+    }
+  }, [win])
+
 
   return (
     <Flex
       align="center"
       direction="column"
-      className="h-screen mt-24"
+      className="min-h-screen pt-24"
       gap="9"
     >
       <Score score={score}/>
-      <GameBoard onScoreChange={updateScore}/>
+      <GameBoard onScoreChange={updateScore} onWin={handleWin} onLose={handleLose}/>
     </Flex>
   );
 }
