@@ -10,9 +10,9 @@ interface Props {
 
 const GameBoard = ({ onScoreChange }: Props) => {
   const [boardData, setBoardData] = useState([
-    [2, 4, 2, 4],
-    [8, 16, 8, 16],
-    [32, 64, 32, 64],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
     [0, 0, 0, 0],
   ]);
 
@@ -47,6 +47,10 @@ const GameBoard = ({ onScoreChange }: Props) => {
     }
     return false;
   };
+
+  const handleWin = () => {
+    setWin(true)
+  }
 
   const moveLeft = () => {
     let points = 0;
@@ -267,6 +271,12 @@ const GameBoard = ({ onScoreChange }: Props) => {
     }
   }, [lose]);
 
+  useEffect(() => {
+    if (win) {
+      console.log("Won the game")
+    }
+  }, [win])
+
   return (
     <Grid
       columns="4"
@@ -277,7 +287,7 @@ const GameBoard = ({ onScoreChange }: Props) => {
         row.map((col, colIndex) => (
           <TileContainer key={`${rowIndex}-${colIndex}`}>
             {col !== 0 && (
-              <Tile value={col} position={[rowIndex, colIndex]} zIndex={10} />
+              <Tile value={col} onWin={handleWin} />
             )}
           </TileContainer>
         ))

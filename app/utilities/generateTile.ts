@@ -23,7 +23,9 @@ const generateTile = (currentBoard: number[][], setLose?: React.Dispatch<React.S
     return newBoard;
   };
 
-// needs to run after move is made and after tile is generated, not before
+// Helper function to generateTile
+// Runs when there are no empty tiles left
+// checks if there are any matching tiles the player can still merge
 const checkLose = (newBoard: number[][]) => {
   for (let r = 0; r < 4; r++) {
     for (let c = 0; c < 3; c++) {
