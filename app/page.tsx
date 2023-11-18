@@ -4,6 +4,8 @@ import Image from "next/image";
 import GameBoard from "./GameBoard";
 import Score from "./Score";
 import { useEffect, useState } from "react";
+import WinModal from "./WinModal";
+import LoseModal from "./LoseModal";
 
 export default function Home() {
   const [score, setScore] = useState(0)
@@ -17,25 +19,27 @@ export default function Home() {
     setWin(true)
   }
 
-  // state to track if player has run out of moves
-  const [lose, setLose] = useState(false)
-  const handleLose = () => {
-    setLose(true)
-  }
-
-  // Check if a player has run out of moves
-  useEffect(() => {
-    if (lose) {
-      console.log("No moves left");
-    }
-  }, [lose]);
-
+  // Runs when player finds 2048 tile
   useEffect(() => {
     if (win) {
       console.log("Won the game")
     }
   }, [win])
 
+  // state to track if player has run out of moves
+  const [lose, setLose] = useState(false)
+  const handleLose = () => {
+    setLose(true)
+  }
+
+  // Runs when player runs out of moves
+  useEffect(() => {
+    if (lose) {
+      console.log("No moves left");
+    }
+  }, [lose]);
+
+  const [isModalOpen, setIsModalOpen] = useState(true)
 
   return (
     <Flex
@@ -46,6 +50,8 @@ export default function Home() {
     >
       <Score score={score}/>
       <GameBoard onScoreChange={updateScore} onWin={handleWin} onLose={handleLose}/>
+      { isModalOpen && win && <WinModal isModalOpen={isModalOpen}/>}
+      { isModalOpen && lose && <LoseModal isModalOpen={isModalOpen}/>}
     </Flex>
   );
 }
