@@ -1,5 +1,5 @@
 import { Grid } from "@radix-ui/themes";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Tile from "./Tile";
 import TileContainer from "./TileContainer";
 import generateTile from "./utilities/generateTile";
@@ -10,9 +10,9 @@ interface Props {
 
 const GameBoard = ({ onScoreChange }: Props) => {
   const [boardData, setBoardData] = useState([
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
+    [2, 4, 2, 4],
+    [8, 16, 8, 16],
+    [32, 64, 32, 64],
     [0, 0, 0, 0],
   ]);
 
@@ -24,6 +24,12 @@ const GameBoard = ({ onScoreChange }: Props) => {
 
   // state to track changes in score after each move
   const [localScore, setLocalScore] = useState(0)
+
+  // state to track if player has made 2048 tile
+  const [win, setWin] = useState(false)
+
+  // state to track if player has run out of moves
+  const [lose, setLose] = useState(false)
 
   // Runs generateTile twice upon startup
   const initializeBoard = () => {
@@ -52,7 +58,6 @@ const GameBoard = ({ onScoreChange }: Props) => {
       for (let r = 0; r < 4; r++) {
         let tilesWithMerge: number[] = []
         for (let c = 1; c < 4; c++) {
-          console.log(r, c)
           if (newBoard[r][c] !== 0) {
             if (newBoard[r][c - 1] === 0) {
               let k = c - 1;
@@ -240,7 +245,7 @@ const GameBoard = ({ onScoreChange }: Props) => {
   useEffect(() => {
     if (moveMade) {
       if (checkBoardChange()) {
-        const newBoard = generateTile(boardData);
+        const newBoard = generateTile(boardData, setLose);
         setBoardData(newBoard);
       }
       setMoveMade(false);
@@ -254,6 +259,13 @@ const GameBoard = ({ onScoreChange }: Props) => {
       setLocalScore(0) // reset local score 
     }
   }, [localScore, onScoreChange])
+
+  // Check if a player has run out of moves
+  useEffect(() => {
+    if (lose) {
+      console.log("No moves left");
+    }
+  }, [lose]);
 
   return (
     <Grid
