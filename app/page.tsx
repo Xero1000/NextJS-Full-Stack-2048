@@ -1,12 +1,11 @@
 "use client";
-import { Button, Flex } from "@radix-ui/themes";
-import Image from "next/image";
+import { Flex } from "@radix-ui/themes";
+import { useState } from "react";
 import GameBoard from "./GameBoard";
-import Score from "./Score";
-import { useEffect, useState } from "react";
-import WinModal from "./WinModal";
 import LoseModal from "./LoseModal";
 import ModalContainer from "./ModalContainer";
+import Score from "./Score";
+import WinModal from "./WinModal";
 
 export default function Home() {
   const [score, setScore] = useState(0);
