@@ -1,29 +1,39 @@
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
 interface Props {
-    score: number
+  score: number;
+}
+
+interface HighscoreForm {
+  name: string;
 }
 
 const HighscoreSubmitForm = ({ score }: Props) => {
-  const [name, setName] = useState("");
+  const { register, handleSubmit } = useForm<HighscoreForm>();
+
+  const onSubmit = (formData: HighscoreForm) => {
+    const dataToSend = { ...formData, score };
+    axios.post("/api/highscores", dataToSend);
+  };
 
   return (
     <>
       <h2>You got a highscore!</h2>
       <h2>Enter your name: </h2>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log(name, score)
-        }}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <input
           type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          placeholder="Type here"
+          className="input input-bordered w-full max-w-xs"
+          {...register("name")}
         />
-        <button type="submit" className="btn">Submit</button>
+        <button type="submit" className="btn">
+          Submit
+        </button>
       </form>
     </>
   );
