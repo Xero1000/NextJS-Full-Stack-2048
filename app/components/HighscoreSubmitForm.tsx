@@ -1,20 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { highscoreNameSchema } from "../validationSchemas";
 import { z } from "zod";
 import Spinner from "./Spinner";
-
-interface Props {
-  score: number;
-}
+import scoreContext from "../state-management/contexts/scoreContext";
 
 // HighscoreForm interface is generated based on properties of
 // highscoreNameSchema
 type HighscoreForm = z.infer<typeof highscoreNameSchema>;
 
-const HighscoreSubmitForm = ({ score }: Props) => {
+const HighscoreSubmitForm = () => {
+  const { score } = useContext(scoreContext)
   const [isSubmitting, setSubmitting] = useState(false);
 
   const {

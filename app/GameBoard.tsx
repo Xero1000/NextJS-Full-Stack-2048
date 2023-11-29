@@ -1,16 +1,18 @@
 import { Grid } from "@radix-ui/themes";
-import React, { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Tile from "./Tile";
 import TileContainer from "./TileContainer";
+import scoreContext from "./state-management/contexts/scoreContext";
 import generateTile from "./utilities/generateTile";
 
-interface Props {
-  onScoreChange: (points: number) => void
+interface Props {   
   onWin: () => void
   onLose: () => void
 }
 
-const GameBoard = ({ onScoreChange, onWin, onLose }: Props) => {
+const GameBoard = ({ onWin, onLose }: Props) => {
+  const { setScore } = useContext(scoreContext)
+
   const [boardData, setBoardData] = useState([
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -23,9 +25,6 @@ const GameBoard = ({ onScoreChange, onWin, onLose }: Props) => {
 
   // variable to track if a move was made
   const [moveMade, setMoveMade] = useState(false);
-
-  // state to track changes in score after each move
-  const [localScore, setLocalScore] = useState(0)
 
   // Runs generateTile twice upon startup
   const initializeBoard = () => {
@@ -63,7 +62,7 @@ const GameBoard = ({ onScoreChange, onWin, onLose }: Props) => {
                 k--;
               }
               if (k >= 0 && newBoard[r][k] === newBoard[r][k + 1] && !tilesWithMerge.includes(k)) {
-                newBoard[r][k] = 2048
+                newBoard[r][k] *= 2
                 newBoard[r][k + 1] = 0;
                 points += newBoard[r][k]
                 tilesWithMerge.push(k)
@@ -77,7 +76,7 @@ const GameBoard = ({ onScoreChange, onWin, onLose }: Props) => {
           }
         }
       }
-      setLocalScore((prevLocalScore) => prevLocalScore + points)
+      setScore((prevScore) => prevScore + points)
       setMoveMade(true);
       return newBoard;
     });
@@ -117,7 +116,7 @@ const GameBoard = ({ onScoreChange, onWin, onLose }: Props) => {
         }
       }
       setMoveMade(true);
-      setLocalScore((prevLocalScore) => prevLocalScore + points)
+      setScore((prevScore) => prevScore + points)
       return newBoard;
     });
   };
@@ -156,7 +155,7 @@ const GameBoard = ({ onScoreChange, onWin, onLose }: Props) => {
         }
       }
       setMoveMade(true);
-      setLocalScore((prevLocalScore) => prevLocalScore + points)
+      setScore((prevScore) => prevScore + points)
       return newBoard;
     });
   };
@@ -195,7 +194,7 @@ const GameBoard = ({ onScoreChange, onWin, onLose }: Props) => {
         }
       }
       setMoveMade(true);
-      setLocalScore((prevLocalScore) => prevLocalScore + points)
+      setScore((prevScore) => prevScore + points)
       return newBoard;
     });
   };
@@ -247,14 +246,6 @@ const GameBoard = ({ onScoreChange, onWin, onLose }: Props) => {
       setMoveMade(false);
     }
   }, [moveMade]);
-
-  // useEffect to update the parent's component score after render phase
-  useEffect(() => {
-    if (localScore > 0) {
-      onScoreChange(localScore)
-      setLocalScore(0) // reset local score 
-    }
-  }, [localScore, onScoreChange])
 
   return (
     <Grid

@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import scoreContext from '../state-management/contexts/scoreContext'
 
-interface Props {
-    score: number
-}
-
-const ModalHighscoreDisplay = ({ score }: Props) => {
+const ModalHighscoreDisplay = () => {
+  const { score } = useContext(scoreContext)
+  
   return (
     <h2>{`Final score: ${score}`}</h2>
   )

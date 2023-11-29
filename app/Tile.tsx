@@ -1,5 +1,5 @@
 import { Flex } from "@radix-ui/themes";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styles from "./Tile.module.css";
 import colorMap from "./constants/colorMap";
 
