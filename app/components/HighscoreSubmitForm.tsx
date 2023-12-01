@@ -7,11 +7,15 @@ import { z } from "zod";
 import Spinner from "./Spinner";
 import scoreContext from "../state-management/contexts/scoreContext";
 
+interface Props {
+  onClose: () => void
+}
+
 // HighscoreForm interface is generated based on properties of
 // highscoreNameSchema
 type HighscoreForm = z.infer<typeof highscoreNameSchema>;
 
-const HighscoreSubmitForm = () => {
+const HighscoreSubmitForm = ({ onClose }: Props) => {
   const { score } = useContext(scoreContext)
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -29,6 +33,7 @@ const HighscoreSubmitForm = () => {
       setSubmitting(true);
       const dataToSend = { ...formData, score };
       await axios.post("/api/highscores", dataToSend);
+      onClose()
     } catch {
       setSubmitting(false);
     }

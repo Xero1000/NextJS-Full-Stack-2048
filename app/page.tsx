@@ -23,6 +23,10 @@ export default function Home() {
     setIsModalOpen(true);
   };
 
+  const onClose = () => {
+    setIsModalOpen(false)
+  }
+
   return (
     <ScoreProvider>
       <Flex
@@ -36,11 +40,11 @@ export default function Home() {
           onWin={handleWin}
           onLose={handleLose}
         />
-        <ModalContainer isModalOpen={isModalOpen}>
+        <ModalContainer isModalOpen={isModalOpen} onClose={onClose}>
           {win ? (
-            <WinModal />
+            <WinModal onClose={onClose}/>
           ) : lose ? (
-            <LoseModal />
+            <LoseModal onClose={onClose}/>
           ) : null}
         </ModalContainer>
       </Flex>

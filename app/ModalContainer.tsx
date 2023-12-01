@@ -3,9 +3,10 @@ import React, { useEffect } from 'react'
 interface Props {
     isModalOpen: boolean
     children: React.ReactNode
+    onClose: () => void 
 }
 
-const ModalContainer = ({ isModalOpen, children }: Props) => {
+const ModalContainer = ({ isModalOpen, children, onClose }: Props) => {
     
     // The modal will open when the player wins or loses
     useEffect(() => {
@@ -15,6 +16,12 @@ const ModalContainer = ({ isModalOpen, children }: Props) => {
             dialogElement.show()
         }
     }, [isModalOpen])
+
+    useEffect(() => {
+      if (!isModalOpen) {
+        onClose()
+      }
+    }, [isModalOpen, onClose])
 
     return (
     <div className="text-white">

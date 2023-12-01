@@ -20,6 +20,8 @@ const GameBoard = ({ onWin, onLose }: Props) => {
     [0, 0, 0, 0],
   ]);
 
+  const [pointsToAdd, setPointsToAdd] = useState(0)
+
   // previous state of the board
   const [prevBoardData, setPrevBoardData] = useState(boardData);
 
@@ -44,7 +46,7 @@ const GameBoard = ({ onWin, onLose }: Props) => {
   };
 
   const moveLeft = () => {
-    let points = 0;
+    let pointsGained = 0;
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
@@ -62,28 +64,29 @@ const GameBoard = ({ onWin, onLose }: Props) => {
                 k--;
               }
               if (k >= 0 && newBoard[r][k] === newBoard[r][k + 1] && !tilesWithMerge.includes(k)) {
-                newBoard[r][k] *= 2
+                newBoard[r][k] = 2048
                 newBoard[r][k + 1] = 0;
-                points += newBoard[r][k]
+                pointsGained += newBoard[r][k]
                 tilesWithMerge.push(k)
               }
             } else if (newBoard[r][c - 1] === newBoard[r][c] && !tilesWithMerge.includes(c - 1)) {
               newBoard[r][c - 1] *= 2;
               newBoard[r][c] = 0;
-              points += newBoard[r][c - 1]
+              pointsGained += newBoard[r][c - 1]
               tilesWithMerge.push(c - 1)
             }
           }
         }
       }
-      setScore((prevScore) => prevScore + points)
+      setPointsToAdd(pointsGained)
       setMoveMade(true);
       return newBoard;
     });
   };
 
+  
   const moveRight = () => {
-    let points = 0;
+    let pointsGained = 0;
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
@@ -103,26 +106,26 @@ const GameBoard = ({ onWin, onLose }: Props) => {
               if (k < 4 && newBoard[r][k] === newBoard[r][k - 1] && !tilesWithMerge.includes(k)) {
                 newBoard[r][k] *= 2;
                 newBoard[r][k - 1] = 0;
-                points += newBoard[r][k]
+                pointsGained += newBoard[r][k]
                 tilesWithMerge.push(k)
               }
             } else if (newBoard[r][c + 1] === newBoard[r][c] && !tilesWithMerge.includes(c + 1)) {
               newBoard[r][c + 1] *= 2;
               newBoard[r][c] = 0;
-              points += newBoard[r][c + 1]
+              pointsGained += newBoard[r][c + 1]
               tilesWithMerge.push(c + 1)
             }
           }
         }
       }
+      setPointsToAdd(pointsGained)
       setMoveMade(true);
-      setScore((prevScore) => prevScore + points)
       return newBoard;
     });
   };
-
+  
   const moveDown = () => {
-    let points = 0;
+    let pointsGained = 0;
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
@@ -142,26 +145,26 @@ const GameBoard = ({ onWin, onLose }: Props) => {
               if (k < 4 && newBoard[k][c] === newBoard[k - 1][c] && !tilesWithMerge.includes(k)) {
                 newBoard[k][c] *= 2;
                 newBoard[k - 1][c] = 0;
-                points += newBoard[k][c]
+                pointsGained += newBoard[k][c]
                 tilesWithMerge.push(k)
               }
             } else if (newBoard[r + 1][c] === newBoard[r][c] && !tilesWithMerge.includes(r + 1)) {
               newBoard[r + 1][c] *= 2;
               newBoard[r][c] = 0;
-              points += newBoard[r + 1][c]
+              pointsGained += newBoard[r + 1][c]
               tilesWithMerge.push(r + 1)
             }
           }
         }
       }
+      setPointsToAdd(pointsGained)
       setMoveMade(true);
-      setScore((prevScore) => prevScore + points)
       return newBoard;
     });
   };
-
+  
   const moveUp = () => {
-    let points = 0;
+    let pointsGained = 0;
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
@@ -181,28 +184,36 @@ const GameBoard = ({ onWin, onLose }: Props) => {
               if (k >= 0 && newBoard[k][c] === newBoard[k + 1][c] && !tilesWithMerge.includes(k)) {
                 newBoard[k][c] *= 2;
                 newBoard[k + 1][c] = 0;
-                points += newBoard[k][c]
+                pointsGained += newBoard[k][c]
                 tilesWithMerge.push(k)
               }
             } else if (newBoard[r - 1][c] === newBoard[r][c] && !tilesWithMerge.includes(r - 1)) {
               newBoard[r - 1][c] *= 2;
               newBoard[r][c] = 0;
-              points += newBoard[r - 1][c]
+              pointsGained += newBoard[r - 1][c]
               tilesWithMerge.push(r - 1)
             }
           }
         }
       }
+      setPointsToAdd(pointsGained)
       setMoveMade(true);
-      setScore((prevScore) => prevScore + points)
       return newBoard;
     });
   };
-
+  
+  
   // board is initialized with two tiles upon startup
   useEffect(() => {
     initializeBoard();
   }, []);
+  
+  // If tiles merge, the new points will be
+  // added to the overall score
+  useEffect(() => {
+    setScore((prevScore) => prevScore + pointsToAdd)
+    setPointsToAdd(0)
+  }, [pointsToAdd])
 
   //
   useEffect(() => {
