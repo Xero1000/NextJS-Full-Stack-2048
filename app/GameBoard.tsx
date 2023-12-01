@@ -6,23 +6,28 @@ import scoreContext from "./state-management/contexts/scoreContext";
 import generateTile from "./utilities/generateTile";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 
-interface Props {   
-  onWin: () => void
-  onLose: () => void
+interface Props {
+  onWin: () => void;
+  onLose: () => void;
 }
 
 const GameBoard = ({ onWin, onLose }: Props) => {
-  const { setIsModalOpen } = useContext(isModalOpenContext)
-  const { setScore } = useContext(scoreContext)
+  const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
+  const { setScore } = useContext(scoreContext);
 
   const [boardData, setBoardData] = useState([
+    // [1, 2, 1, 2],
+    // [2, 1, 2, 1],
+    // [3, 5, 3, 5],
+    // [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
   ]);
+  const [gameOver, setGameOver] = useState(false)
 
-  const [pointsToAdd, setPointsToAdd] = useState(0)
+  const [pointsToAdd, setPointsToAdd] = useState(0);
 
   // previous state of the board
   const [prevBoardData, setPrevBoardData] = useState(boardData);
@@ -55,7 +60,7 @@ const GameBoard = ({ onWin, onLose }: Props) => {
       setPrevBoardData(currentBoard); // save board state prior to change
       let newBoard = currentBoard.map((row) => [...row]);
       for (let r = 0; r < 4; r++) {
-        let tilesWithMerge: number[] = []
+        let tilesWithMerge: number[] = [];
         for (let c = 1; c < 4; c++) {
           if (newBoard[r][c] !== 0) {
             if (newBoard[r][c - 1] === 0) {
@@ -65,28 +70,34 @@ const GameBoard = ({ onWin, onLose }: Props) => {
                 newBoard[r][k + 1] = 0;
                 k--;
               }
-              if (k >= 0 && newBoard[r][k] === newBoard[r][k + 1] && !tilesWithMerge.includes(k)) {
-                newBoard[r][k] = 2048
+              if (
+                k >= 0 &&
+                newBoard[r][k] === newBoard[r][k + 1] &&
+                !tilesWithMerge.includes(k)
+              ) {
+                newBoard[r][k] = 2048;
                 newBoard[r][k + 1] = 0;
-                pointsGained += newBoard[r][k]
-                tilesWithMerge.push(k)
+                pointsGained += newBoard[r][k];
+                tilesWithMerge.push(k);
               }
-            } else if (newBoard[r][c - 1] === newBoard[r][c] && !tilesWithMerge.includes(c - 1)) {
+            } else if (
+              newBoard[r][c - 1] === newBoard[r][c] &&
+              !tilesWithMerge.includes(c - 1)
+            ) {
               newBoard[r][c - 1] *= 2;
               newBoard[r][c] = 0;
-              pointsGained += newBoard[r][c - 1]
-              tilesWithMerge.push(c - 1)
+              pointsGained += newBoard[r][c - 1];
+              tilesWithMerge.push(c - 1);
             }
           }
         }
       }
-      setPointsToAdd(pointsGained)
+      setPointsToAdd(pointsGained);
       setMoveMade(true);
       return newBoard;
     });
   };
 
-  
   const moveRight = () => {
     let pointsGained = 0;
     // use functional update to ensure the most current board
@@ -95,7 +106,7 @@ const GameBoard = ({ onWin, onLose }: Props) => {
       setPrevBoardData(currentBoard); // save board state prior to change
       let newBoard = currentBoard.map((row) => [...row]);
       for (let r = 0; r < 4; r++) {
-        let tilesWithMerge: number[] = []
+        let tilesWithMerge: number[] = [];
         for (let c = 2; c >= 0; c--) {
           if (newBoard[r][c] !== 0) {
             if (newBoard[r][c + 1] === 0) {
@@ -105,27 +116,34 @@ const GameBoard = ({ onWin, onLose }: Props) => {
                 newBoard[r][k - 1] = 0;
                 k++;
               }
-              if (k < 4 && newBoard[r][k] === newBoard[r][k - 1] && !tilesWithMerge.includes(k)) {
+              if (
+                k < 4 &&
+                newBoard[r][k] === newBoard[r][k - 1] &&
+                !tilesWithMerge.includes(k)
+              ) {
                 newBoard[r][k] *= 2;
                 newBoard[r][k - 1] = 0;
-                pointsGained += newBoard[r][k]
-                tilesWithMerge.push(k)
+                pointsGained += newBoard[r][k];
+                tilesWithMerge.push(k);
               }
-            } else if (newBoard[r][c + 1] === newBoard[r][c] && !tilesWithMerge.includes(c + 1)) {
+            } else if (
+              newBoard[r][c + 1] === newBoard[r][c] &&
+              !tilesWithMerge.includes(c + 1)
+            ) {
               newBoard[r][c + 1] *= 2;
               newBoard[r][c] = 0;
-              pointsGained += newBoard[r][c + 1]
-              tilesWithMerge.push(c + 1)
+              pointsGained += newBoard[r][c + 1];
+              tilesWithMerge.push(c + 1);
             }
           }
         }
       }
-      setPointsToAdd(pointsGained)
+      setPointsToAdd(pointsGained);
       setMoveMade(true);
       return newBoard;
     });
   };
-  
+
   const moveDown = () => {
     let pointsGained = 0;
     // use functional update to ensure the most current board
@@ -134,7 +152,7 @@ const GameBoard = ({ onWin, onLose }: Props) => {
       setPrevBoardData(currentBoard); // save board state prior to change
       let newBoard = currentBoard.map((row) => [...row]);
       for (let c = 0; c < 4; c++) {
-        let tilesWithMerge: number[] = []
+        let tilesWithMerge: number[] = [];
         for (let r = 2; r >= 0; r--) {
           if (newBoard[r][c] !== 0) {
             if (newBoard[r + 1][c] === 0) {
@@ -144,27 +162,34 @@ const GameBoard = ({ onWin, onLose }: Props) => {
                 newBoard[k - 1][c] = 0;
                 k++;
               }
-              if (k < 4 && newBoard[k][c] === newBoard[k - 1][c] && !tilesWithMerge.includes(k)) {
+              if (
+                k < 4 &&
+                newBoard[k][c] === newBoard[k - 1][c] &&
+                !tilesWithMerge.includes(k)
+              ) {
                 newBoard[k][c] *= 2;
                 newBoard[k - 1][c] = 0;
-                pointsGained += newBoard[k][c]
-                tilesWithMerge.push(k)
+                pointsGained += newBoard[k][c];
+                tilesWithMerge.push(k);
               }
-            } else if (newBoard[r + 1][c] === newBoard[r][c] && !tilesWithMerge.includes(r + 1)) {
+            } else if (
+              newBoard[r + 1][c] === newBoard[r][c] &&
+              !tilesWithMerge.includes(r + 1)
+            ) {
               newBoard[r + 1][c] *= 2;
               newBoard[r][c] = 0;
-              pointsGained += newBoard[r + 1][c]
-              tilesWithMerge.push(r + 1)
+              pointsGained += newBoard[r + 1][c];
+              tilesWithMerge.push(r + 1);
             }
           }
         }
       }
-      setPointsToAdd(pointsGained)
+      setPointsToAdd(pointsGained);
       setMoveMade(true);
       return newBoard;
     });
   };
-  
+
   const moveUp = () => {
     let pointsGained = 0;
     // use functional update to ensure the most current board
@@ -173,7 +198,7 @@ const GameBoard = ({ onWin, onLose }: Props) => {
       setPrevBoardData(currentBoard); // save board state prior to change
       let newBoard = currentBoard.map((row) => [...row]);
       for (let c = 0; c < 4; c++) {
-        let tilesWithMerge: number[] = []
+        let tilesWithMerge: number[] = [];
         for (let r = 1; r < 4; r++) {
           if (newBoard[r][c] !== 0) {
             if (newBoard[r - 1][c] === 0) {
@@ -183,69 +208,83 @@ const GameBoard = ({ onWin, onLose }: Props) => {
                 newBoard[k + 1][c] = 0;
                 k--;
               }
-              if (k >= 0 && newBoard[k][c] === newBoard[k + 1][c] && !tilesWithMerge.includes(k)) {
+              if (
+                k >= 0 &&
+                newBoard[k][c] === newBoard[k + 1][c] &&
+                !tilesWithMerge.includes(k)
+              ) {
                 newBoard[k][c] *= 2;
                 newBoard[k + 1][c] = 0;
-                pointsGained += newBoard[k][c]
-                tilesWithMerge.push(k)
+                pointsGained += newBoard[k][c];
+                tilesWithMerge.push(k);
               }
-            } else if (newBoard[r - 1][c] === newBoard[r][c] && !tilesWithMerge.includes(r - 1)) {
+            } else if (
+              newBoard[r - 1][c] === newBoard[r][c] &&
+              !tilesWithMerge.includes(r - 1)
+            ) {
               newBoard[r - 1][c] *= 2;
               newBoard[r][c] = 0;
-              pointsGained += newBoard[r - 1][c]
-              tilesWithMerge.push(r - 1)
+              pointsGained += newBoard[r - 1][c];
+              tilesWithMerge.push(r - 1);
             }
           }
         }
       }
-      setPointsToAdd(pointsGained)
+      setPointsToAdd(pointsGained);
       setMoveMade(true);
       return newBoard;
     });
   };
-  
-  
+
   // board is initialized with two tiles upon startup
   useEffect(() => {
     initializeBoard();
   }, []);
-  
+
   // If tiles merge, the new points will be
   // added to the overall score
   useEffect(() => {
-    setScore((prevScore) => prevScore + pointsToAdd)
-    setPointsToAdd(0)
-  }, [pointsToAdd])
+    setScore((prevScore) => prevScore + pointsToAdd);
+    setPointsToAdd(0);
+  }, [pointsToAdd]);
 
   //
+  const handleKeyPress = (e: KeyboardEvent) => {
+    switch (e.key) {
+      case "w": // pressing 'w' will move tiles up
+        moveUp();
+        break;
+      case "a": // pressing 'a' will move tiles left
+        moveLeft();
+        break;
+      case "s": // pressing 's' will move tiles down
+        moveDown();
+        break;
+      case "d": // pressing 'd' will move tiles right
+        moveRight();
+        break;
+      default:
+        break;
+    }
+  };
+
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      switch (e.key) {
-        case "w": // pressing 'w' will move tiles up
-          moveUp();
-          break;
-        case "a": // pressing 'a' will move tiles left
-          moveLeft();
-          break;
-        case "s": // pressing 's' will move tiles down
-          moveDown();
-          break;
-        case "d": // pressing 'd' will move tiles right
-          moveRight();
-          break;
-        default:
-          break;
-      }
-    };
+    if (!isModalOpen && !gameOver) {
+      // event listener for keydown event
+      window.addEventListener("keydown", handleKeyPress);
+  
+      // cleanup function to remove event listener
+      return () => {
+        window.removeEventListener("keydown", handleKeyPress);
+      };
+    }
+  }, [isModalOpen]);
 
-    // event listener for keydown event
-    window.addEventListener("keydown", handleKeyPress);
-
-    // cleanup function to remove event listener
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, []);
+  // disables keyboard events upon player
+  // winning or losing 
+  useEffect(() => {
+    setGameOver(true)
+  }, [onWin, onLose])
 
   // When a move is made, if the board changed at all from the
   // previous board state, a new tile will be generated
@@ -269,9 +308,7 @@ const GameBoard = ({ onWin, onLose }: Props) => {
       {boardData.map((row, rowIndex) =>
         row.map((col, colIndex) => (
           <TileContainer key={`${rowIndex}-${colIndex}`}>
-            {col !== 0 && (
-              <Tile value={col} onWin={onWin} />
-            )}
+            {col !== 0 && <Tile value={col} onWin={onWin} />}
           </TileContainer>
         ))
       )}
