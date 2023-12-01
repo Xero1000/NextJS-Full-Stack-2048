@@ -1,5 +1,7 @@
+import { Dispatch, SetStateAction } from "react";
 
-const generateTile = (currentBoard: number[][], setLose?: React.Dispatch<React.SetStateAction<boolean>>) => {
+const generateTile = (currentBoard: number[][], setIsModalOpen?: Dispatch<SetStateAction<boolean>>, setLose?: Dispatch<SetStateAction<boolean>>) => {
+  
     let newBoard = currentBoard.map((row) => [...row]);
     let emptySpaces: { rowIndex: number; colIndex: number }[] = [];
 
@@ -17,8 +19,9 @@ const generateTile = (currentBoard: number[][], setLose?: React.Dispatch<React.S
       emptySpaces.splice(emptySpaceIndex, 1) // Updated emptySpaces to remove the newly generated tile
     }
 
-    if (setLose && !emptySpaces.length && checkLose(newBoard)) {
+    if (setLose && setIsModalOpen && !emptySpaces.length && checkLose(newBoard)) {
       setLose(true)
+      setIsModalOpen(true)
     }
     return newBoard;
   };

@@ -6,16 +6,15 @@ import { highscoreNameSchema } from "../validationSchemas";
 import { z } from "zod";
 import Spinner from "./Spinner";
 import scoreContext from "../state-management/contexts/scoreContext";
-
-interface Props {
-  onClose: () => void
-}
+import isModalOpenContext from "../state-management/contexts/isModalOpenContext";
 
 // HighscoreForm interface is generated based on properties of
 // highscoreNameSchema
 type HighscoreForm = z.infer<typeof highscoreNameSchema>;
 
-const HighscoreSubmitForm = ({ onClose }: Props) => {
+const HighscoreSubmitForm = () => {
+  const { setIsModalOpen } = useContext(isModalOpenContext)
+
   const { score } = useContext(scoreContext)
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -33,7 +32,7 @@ const HighscoreSubmitForm = ({ onClose }: Props) => {
       setSubmitting(true);
       const dataToSend = { ...formData, score };
       await axios.post("/api/highscores", dataToSend);
-      onClose()
+      setIsModalOpen(false)
     } catch {
       setSubmitting(false);
     }

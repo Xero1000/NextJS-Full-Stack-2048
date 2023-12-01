@@ -1,7 +1,8 @@
 import { Flex } from "@radix-ui/themes";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import styles from "./Tile.module.css";
 import colorMap from "./constants/colorMap";
+import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 
 interface Props {
   value: number;
@@ -9,12 +10,15 @@ interface Props {
 }
 
 const Tile = ({ value, onWin }: Props) => {
+  const { setIsModalOpen } = useContext(isModalOpenContext)
 
   // useEffect to prevent the update of win inside GameBoard while
   // attempting to render Tile during the render phase
   useEffect(() => {
-    if (value === 2048) 
+    if (value === 2048) {
       onWin()
+      setIsModalOpen(true)
+    }
   }, [value])
 
   return (

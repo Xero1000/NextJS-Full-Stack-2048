@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
+import isModalOpenContext from './state-management/contexts/isModalOpenContext'
 
 interface Props {
-    isModalOpen: boolean
     children: React.ReactNode
-    onClose: () => void 
 }
 
-const ModalContainer = ({ isModalOpen, children, onClose }: Props) => {
-    
+const ModalContainer = ({ children }: Props) => {
+    const { isModalOpen, setIsModalOpen} = useContext(isModalOpenContext)  
+
     // The modal will open when the player wins or loses
     useEffect(() => {
         // if statement keeps modal from opening upon page load up
@@ -19,9 +19,9 @@ const ModalContainer = ({ isModalOpen, children, onClose }: Props) => {
 
     useEffect(() => {
       if (!isModalOpen) {
-        onClose()
+        setIsModalOpen(false)
       }
-    }, [isModalOpen, onClose])
+    }, [isModalOpen])
 
     return (
     <div className="text-white">

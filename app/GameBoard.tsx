@@ -4,6 +4,7 @@ import Tile from "./Tile";
 import TileContainer from "./TileContainer";
 import scoreContext from "./state-management/contexts/scoreContext";
 import generateTile from "./utilities/generateTile";
+import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 
 interface Props {   
   onWin: () => void
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const GameBoard = ({ onWin, onLose }: Props) => {
+  const { setIsModalOpen } = useContext(isModalOpenContext)
   const { setScore } = useContext(scoreContext)
 
   const [boardData, setBoardData] = useState([
@@ -251,7 +253,7 @@ const GameBoard = ({ onWin, onLose }: Props) => {
   useEffect(() => {
     if (moveMade) {
       if (checkBoardChange()) {
-        const newBoard = generateTile(boardData, onLose);
+        const newBoard = generateTile(boardData, setIsModalOpen, onLose);
         setBoardData(newBoard);
       }
       setMoveMade(false);
