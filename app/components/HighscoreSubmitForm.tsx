@@ -14,7 +14,6 @@ type HighscoreForm = z.infer<typeof highscoreNameSchema>;
 
 const HighscoreSubmitForm = () => {
   const { setIsModalOpen } = useContext(isModalOpenContext)
-
   const { score } = useContext(scoreContext)
   const [isSubmitting, setSubmitting] = useState(false);
 

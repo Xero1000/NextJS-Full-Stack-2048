@@ -2,12 +2,12 @@
 import { Flex } from "@radix-ui/themes";
 import { useState } from "react";
 import GameBoard from "./GameBoard";
-import LoseModal from "./LoseModal";
+import LoseMessage from "./LoseMessage";
 import ModalContainer from "./ModalContainer";
 import Score from "./Score";
-import WinModal from "./WinModal";
+import WinMessage from "./WinMessage";
 import ScoreProvider from "./state-management/providers/ScoreProvider";
-import IsModalOpenProvider from "./state-management/providers/isModalOpenProvider";
+import IsModalOpenProvider from "./state-management/providers/IsModalOpenProvider";
 
 export default function Home() {
   const [win, setWin] = useState(false);
@@ -32,8 +32,8 @@ export default function Home() {
         >
           <Score />
           <GameBoard onWin={handleWin} onLose={handleLose} />
-          <ModalContainer>
-            {win ? <WinModal /> : lose ? <LoseModal /> : null}
+          <ModalContainer win={win} lose={lose}>
+            {win ? <WinMessage /> : lose ? <LoseMessage /> : null}
           </ModalContainer>
         </Flex>
       </ScoreProvider>

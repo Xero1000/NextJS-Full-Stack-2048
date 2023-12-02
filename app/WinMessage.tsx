@@ -1,15 +1,13 @@
 import HighscoreSubmitForm from './components/HighscoreSubmitForm'
 import ModalHighscoreDisplay from './components/ModalHighscoreDisplay'
 
-const LoseModal = () => {
-  
+const WinMessage = () => {
+
   return (
     <div className="text-white">
-      <h1>Sorry! You&apos;re out of moves!</h1>
-      <ModalHighscoreDisplay />
-      <HighscoreSubmitForm />
+      <h1>Congratulations! You&apos;ve reached 2048!</h1>
     </div>
   )
 }
 
-export default LoseModal
+export default WinMessage
