@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./Text.module.css"
 
 interface Props {
   onHighscoreClick: () => void;
@@ -16,7 +17,7 @@ const NavBar = ({ onHighscoreClick }: Props) => {
   };
 
   return (
-    <div className="navbar bg-base-100 fixed z-10">
+    <div className="navbar bg-base-100 fixed z-10 text-white">
       <div className="navbar-start">
         <div className="dropdown">
           <label

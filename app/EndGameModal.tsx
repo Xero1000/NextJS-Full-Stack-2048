@@ -4,14 +4,15 @@ import HighscoreSubmitForm from "./components/HighscoreSubmitForm";
 import ModalHighscoreDisplay from "./components/ModalHighscoreDisplay";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import scoreContext from "./state-management/contexts/scoreContext";
+import WinMessage from "./WinMessage";
+import LoseMessage from "./LoseMessage";
 
 interface Props {
-  children: React.ReactNode;
   win: boolean
   lose: boolean
 }
 
-const EndGameModal = ({ children, win, lose }: Props) => {
+const EndGameModal = ({ win, lose }: Props) => {
   const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
   const { score } = useContext(scoreContext);
 
@@ -48,7 +49,9 @@ const EndGameModal = ({ children, win, lose }: Props) => {
     <div className="text-white">
       <dialog open={isModalOpen && (win || lose)} id="end_game_modal" className="modal">
         <div className="modal-box">
-          {children}
+          <div className="text-white text-center text-2xl">
+            {win ? <WinMessage/> : lose ? <LoseMessage /> : null}
+          </div>
           <ModalHighscoreDisplay/>
           { showSubmit && <HighscoreSubmitForm /> }
           <div className="modal-action">

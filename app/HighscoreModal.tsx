@@ -15,7 +15,7 @@ interface Highscore {
 }
 
 const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
-  const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
+  const { setIsModalOpen } = useContext(isModalOpenContext);
 
   const [highscores, setHighscores] = useState<Highscore[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,13 +44,13 @@ const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
   return (
     <div>
       <dialog open={isHighscoreModalOpen} id="my_modal_2" className="modal">
-        <div className="modal-box">
+        <div className="modal-box text-white">
           <h3 className="font-bold text-2xl text-center mb-5">Highscores</h3>
           <div className="overflow-x-auto">
-            <table className="table table-zebra">
+            <table className="table table-zebra text-center">
               {/* head */}
               <thead>
-                <tr>
+                <tr className="text-lg">
                   <th></th>
                   <th>Name</th>
                   <th>Highscore</th>
@@ -59,7 +59,7 @@ const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
               {isLoading ? (
                 <Spinner />
               ) : (
-                <tbody>
+                <tbody className="text-lg">
                   {highscores.map((highscore, index) => (
                     <tr key={highscore.id}>
                       <td>{index + 1}</td>

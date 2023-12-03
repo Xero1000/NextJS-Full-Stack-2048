@@ -21,19 +21,22 @@ export default function Home() {
   };
 
   return (
-      <ScoreProvider>
-        <Flex
-          align="center"
-          direction="column"
-          className="min-h-screen pt-24"
-          gap="9"
-        >
-          <Score />
-          <GameBoard win={win} lose={lose} onWin={handleWin} onLose={handleLose} />
-          <EndGameModal win={win} lose={lose}>
-            {win ? <WinMessage /> : lose ? <LoseMessage /> : null}
-          </EndGameModal>
-        </Flex>
-      </ScoreProvider>
+    <ScoreProvider>
+      <Flex
+        align="center"
+        direction="column"
+        className="min-h-screen pt-24"
+        gap="9"
+      >
+        <Score />
+        <GameBoard
+          win={win}
+          lose={lose}
+          onWin={handleWin}
+          onLose={handleLose}
+        />
+        <EndGameModal win={win} lose={lose} />
+      </Flex>
+    </ScoreProvider>
   );
 }
