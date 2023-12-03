@@ -1,11 +1,9 @@
 "use client";
 import { Flex } from "@radix-ui/themes";
 import { useState } from "react";
-import GameBoard from "./GameBoard";
-import LoseMessage from "./LoseMessage";
 import EndGameModal from "./EndGameModal";
+import GameBoard from "./GameBoard";
 import Score from "./Score";
-import WinMessage from "./WinMessage";
 import ScoreProvider from "./state-management/providers/ScoreProvider";
 
 export default function Home() {
@@ -19,6 +17,11 @@ export default function Home() {
   const handleLose = () => {
     setLose(true);
   };
+
+  const resetWinLose = () => {
+    setWin(false)
+    setLose(false)
+  }
 
   return (
     <ScoreProvider>
@@ -34,6 +37,7 @@ export default function Home() {
           lose={lose}
           onWin={handleWin}
           onLose={handleLose}
+          resetWinLose={resetWinLose}
         />
         <EndGameModal win={win} lose={lose} />
       </Flex>

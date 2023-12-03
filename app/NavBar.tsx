@@ -1,11 +1,15 @@
-import React, { useState } from "react";
-import styles from "./Text.module.css"
+import React, { useContext, useState } from "react";
+import restartGameContext from "./state-management/contexts/restartGameContext";
+import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 
 interface Props {
   onHighscoreClick: () => void;
 }
 
 const NavBar = ({ onHighscoreClick }: Props) => {
+  const { setRestartGame } = useContext(restartGameContext)
+  const { isModalOpen } = useContext(isModalOpenContext)
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -46,7 +50,7 @@ const NavBar = ({ onHighscoreClick }: Props) => {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <button onClick={() => { onHighscoreClick(); closeDropdown(); }}>Highscores</button>
+                <button className={`${isModalOpen ? "cursor-not-allowed opacity-95": ""}`} onClick={() => { onHighscoreClick(); closeDropdown(); }} disabled={isModalOpen}>Highscores</button>
               </li>
               <li>
                 <a>Save Game</a>
@@ -55,7 +59,7 @@ const NavBar = ({ onHighscoreClick }: Props) => {
                 <a>Load Game</a>
               </li>
               <li>
-                <a>Restart</a>
+              <button onClick={() => setRestartGame(true)}>Restart</button>
               </li>
             </ul>
           )}
@@ -74,7 +78,7 @@ const NavBar = ({ onHighscoreClick }: Props) => {
             <a>Load Game</a>
           </li>
           <li>
-            <a>Restart</a>
+            <button onClick={() => setRestartGame(true)}>Restart</button>
           </li>
         </ul>
       </div>

@@ -5,17 +5,20 @@ import TileContainer from "./TileContainer";
 import scoreContext from "./state-management/contexts/scoreContext";
 import generateTile from "./utilities/generateTile";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
+import restartGameContext from "./state-management/contexts/restartGameContext";
 
 interface Props {
-  win: boolean
-  lose: boolean
+  win: boolean;
+  lose: boolean;
   onWin: () => void;
   onLose: () => void;
+  resetWinLose: () => void;
 }
 
-const GameBoard = ({ win, lose, onWin, onLose }: Props) => {
+const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
   const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
   const { setScore } = useContext(scoreContext);
+  const { restartGame, setRestartGame } = useContext(restartGameContext);
 
   const [boardData, setBoardData] = useState([
     // [1, 2, 1, 2],
@@ -27,7 +30,7 @@ const GameBoard = ({ win, lose, onWin, onLose }: Props) => {
     [0, 0, 0, 0],
     [0, 0, 0, 0],
   ]);
-  const [gameOver, setGameOver] = useState(false)
+  const [gameOver, setGameOver] = useState(false);
 
   const [pointsToAdd, setPointsToAdd] = useState(0);
 
@@ -238,10 +241,35 @@ const GameBoard = ({ win, lose, onWin, onLose }: Props) => {
     });
   };
 
-  // board is initialized with two tiles upon startup
+  // // board is initialized with two tiles upon startup
+  // useEffect(() => {
+  //   initializeBoard();
+  // }, []);
+
+  // the following two effect hooks work together
+  // the first one resets the board data
   useEffect(() => {
-    initializeBoard();
-  }, []);
+    if (restartGame) {
+      setScore(0);
+      setBoardData([
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+      ]);
+      resetWinLose()
+      setIsModalOpen(false)
+      setGameOver(false)
+      setRestartGame(false);
+    }
+  }, [restartGame]);
+
+  // this second effect calls initializeBoard if every tile is 0
+  useEffect(() => {
+    if (boardData.every(row => row.every(cell => cell === 0))) {
+      initializeBoard()
+    }
+  }, [boardData])
 
   // If tiles merge, the new points will be
   // added to the overall score
@@ -274,7 +302,7 @@ const GameBoard = ({ win, lose, onWin, onLose }: Props) => {
     if (!isModalOpen && !gameOver) {
       // event listener for keydown event
       window.addEventListener("keydown", handleKeyPress);
-  
+
       // cleanup function to remove event listener
       return () => {
         window.removeEventListener("keydown", handleKeyPress);
@@ -283,12 +311,10 @@ const GameBoard = ({ win, lose, onWin, onLose }: Props) => {
   }, [isModalOpen]);
 
   // disables keyboard events upon player
-  // winning or losing 
+  // winning or losing
   useEffect(() => {
-    if (win || lose)
-      setGameOver(true)
-  }, [win, lose])
-  
+    if (win || lose) setGameOver(true);
+  }, [win, lose]);
 
   // When a move is made, if the board changed at all from the
   // previous board state, a new tile will be generated
