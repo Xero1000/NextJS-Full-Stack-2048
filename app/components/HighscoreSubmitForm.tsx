@@ -39,18 +39,17 @@ const HighscoreSubmitForm = () => {
 
   return (
     <>
-      <h2>You got a highscore!</h2>
-      <h2>Enter your name: </h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <h2 className="text-center text-xl mb-5">You got a highscore!</h2>
+      <form className="flex flex-col items-center gap-5" onSubmit={handleSubmit(onSubmit)}>
         <input
           type="text"
-          placeholder="Type here"
+          placeholder="Enter your name"
           className="input input-bordered w-full max-w-xs"
           {...register("name")}
         />
         <button
           type="submit"
-          className={`btn ${
+          className={`btn ml-5 ${
             isSubmitting ? "cursor-not-allowed opacity-95" : ""
           }`}
           disabled={isSubmitting}

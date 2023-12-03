@@ -5,7 +5,7 @@ const ModalHighscoreDisplay = () => {
   const { score } = useContext(scoreContext)
   
   return (
-    <h2>{`Final score: ${score}`}</h2>
+    <h2 className='my-7 text-lg text-center'>{`Final score: ${score}`}</h2>
   )
 }
 

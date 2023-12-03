@@ -49,7 +49,7 @@ const EndGameModal = ({ children, win, lose }: Props) => {
       <dialog open={isModalOpen && (win || lose)} id="end_game_modal" className="modal">
         <div className="modal-box">
           {children}
-          <ModalHighscoreDisplay />
+          <ModalHighscoreDisplay/>
           { showSubmit && <HighscoreSubmitForm /> }
           <div className="modal-action">
             <form method="dialog">

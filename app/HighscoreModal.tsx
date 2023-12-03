@@ -45,18 +45,32 @@ const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
     <div>
       <dialog open={isHighscoreModalOpen} id="my_modal_2" className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Highscores</h3>
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            <ol>
-              {highscores.map((highscore, index) => (
-                <li
-                  key={highscore.id}
-                >{`${highscore.name}: ${highscore.score}`}</li>
-              ))}
-            </ol>
-          )}
+          <h3 className="font-bold text-2xl text-center mb-5">Highscores</h3>
+          <div className="overflow-x-auto">
+            <table className="table table-zebra">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Highscore</th>
+                </tr>
+              </thead>
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <tbody>
+                  {highscores.map((highscore, index) => (
+                    <tr key={highscore.id}>
+                      <td>{index + 1}</td>
+                      <td>{highscore.name}</td>
+                      <td>{highscore.score}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              )}
+            </table>
+          </div>
         </div>
         <form method="dialog" className="modal-backdrop">
           <button onClick={onClose}>close</button>
