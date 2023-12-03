@@ -11,7 +11,7 @@ interface Props {
   lose: boolean
 }
 
-const ModalContainer = ({ children, win, lose }: Props) => {
+const EndGameModal = ({ children, win, lose }: Props) => {
   const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
   const { score } = useContext(scoreContext);
 
@@ -46,7 +46,7 @@ const ModalContainer = ({ children, win, lose }: Props) => {
 
   return (
     <div className="text-white">
-      <dialog open={isModalOpen} id="my_modal_1" className="modal">
+      <dialog open={isModalOpen && (win || lose)} id="end_game_modal" className="modal">
         <div className="modal-box">
           {children}
           <ModalHighscoreDisplay />
@@ -70,4 +70,4 @@ const ModalContainer = ({ children, win, lose }: Props) => {
   );
 };
 
-export default ModalContainer;
+export default EndGameModal;

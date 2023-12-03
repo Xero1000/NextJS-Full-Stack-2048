@@ -2,8 +2,9 @@ import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import NavBar from "./NavBar";
 import "./globals.css";
+import NavBarWithModals from "./NavBarWithModals";
+import NavBarAndThemeWrapper from "./NavBarAndThemeWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="luxury">
       <body className={inter.className}>
-        <NavBar />
-        <Theme>
-          {children}
-        </Theme>
+        <NavBarAndThemeWrapper>
+          <NavBarWithModals />
+          <Theme>{children}</Theme>
+        </NavBarAndThemeWrapper>
       </body>
     </html>
   );

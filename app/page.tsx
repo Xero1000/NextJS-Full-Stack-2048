@@ -3,11 +3,10 @@ import { Flex } from "@radix-ui/themes";
 import { useState } from "react";
 import GameBoard from "./GameBoard";
 import LoseMessage from "./LoseMessage";
-import ModalContainer from "./ModalContainer";
+import EndGameModal from "./EndGameModal";
 import Score from "./Score";
 import WinMessage from "./WinMessage";
 import ScoreProvider from "./state-management/providers/ScoreProvider";
-import IsModalOpenProvider from "./state-management/providers/IsModalOpenProvider";
 
 export default function Home() {
   const [win, setWin] = useState(false);
@@ -22,7 +21,6 @@ export default function Home() {
   };
 
   return (
-    <IsModalOpenProvider>
       <ScoreProvider>
         <Flex
           align="center"
@@ -31,12 +29,11 @@ export default function Home() {
           gap="9"
         >
           <Score />
-          <GameBoard onWin={handleWin} onLose={handleLose} />
-          <ModalContainer win={win} lose={lose}>
+          <GameBoard win={win} lose={lose} onWin={handleWin} onLose={handleLose} />
+          <EndGameModal win={win} lose={lose}>
             {win ? <WinMessage /> : lose ? <LoseMessage /> : null}
-          </ModalContainer>
+          </EndGameModal>
         </Flex>
       </ScoreProvider>
-    </IsModalOpenProvider>
   );
 }

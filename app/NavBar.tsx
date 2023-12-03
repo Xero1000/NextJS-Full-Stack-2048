@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 
-const NavBar = () => {
+interface Props {
+  onHighscoreClick: () => void;
+}
+
+const NavBar = ({ onHighscoreClick }: Props) => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const closeDropdown = () => {
+    setDropdownOpen(false);
+  };
+
   return (
     <div className="navbar bg-base-100 fixed z-10">
       <div className="navbar-start">
         <div className="dropdown">
-          <label tabIndex={0} className="btn btn-ghost lg:hidden">
+          <label
+            tabIndex={0}
+            className="btn btn-ghost lg:hidden"
+            onClick={toggleDropdown}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -21,30 +39,32 @@ const NavBar = () => {
               />
             </svg>
           </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li>
-              <a>Highscores</a>
-            </li>
-            <li>
-              <a>Save Game</a>
-            </li>
-            <li>
-              <a>Load Game</a>
-            </li>
-            <li>
-              <a>Restart</a>
-            </li>
-          </ul>
+          {dropdownOpen && (
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <button onClick={() => { onHighscoreClick(); closeDropdown(); }}>Highscores</button>
+              </li>
+              <li>
+                <a>Save Game</a>
+              </li>
+              <li>
+                <a>Load Game</a>
+              </li>
+              <li>
+                <a>Restart</a>
+              </li>
+            </ul>
+          )}
         </div>
         <a className="btn btn-ghost text-xl">2048</a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a>Highscores</a>
+            <button onClick={onHighscoreClick}>Highscores</button>
           </li>
           <li>
             <a>Save Game</a>

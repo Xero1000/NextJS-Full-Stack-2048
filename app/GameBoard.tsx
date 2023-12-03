@@ -7,11 +7,13 @@ import generateTile from "./utilities/generateTile";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 
 interface Props {
+  win: boolean
+  lose: boolean
   onWin: () => void;
   onLose: () => void;
 }
 
-const GameBoard = ({ onWin, onLose }: Props) => {
+const GameBoard = ({ win, lose, onWin, onLose }: Props) => {
   const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
   const { setScore } = useContext(scoreContext);
 
@@ -75,7 +77,7 @@ const GameBoard = ({ onWin, onLose }: Props) => {
                 newBoard[r][k] === newBoard[r][k + 1] &&
                 !tilesWithMerge.includes(k)
               ) {
-                newBoard[r][k] *= 2;
+                newBoard[r][k] = 2048;
                 newBoard[r][k + 1] = 0;
                 pointsGained += newBoard[r][k];
                 tilesWithMerge.push(k);
@@ -283,8 +285,10 @@ const GameBoard = ({ onWin, onLose }: Props) => {
   // disables keyboard events upon player
   // winning or losing 
   useEffect(() => {
-    setGameOver(true)
-  }, [onWin, onLose])
+    if (win || lose)
+      setGameOver(true)
+  }, [win, lose])
+  
 
   // When a move is made, if the board changed at all from the
   // previous board state, a new tile will be generated
