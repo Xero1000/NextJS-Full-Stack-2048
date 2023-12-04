@@ -21,24 +21,25 @@ const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-    const getHighscores = async () => {
-      try {
-        const response = await axios.get("/api/highscores");
-        const data = response.data;
-        setHighscores(data);
-      } catch (error) {
-        console.error("Error fetching highscores: ", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getHighscores();
-  }, []);
-
-  useEffect(() => {
-    if (isHighscoreModalOpen) setIsModalOpen(true);
-    else setIsModalOpen(false);
+    if (isHighscoreModalOpen) {
+      setIsLoading(true);
+      setIsModalOpen(true)
+      const getHighscores = async () => {
+        try {
+          const response = await axios.get("/api/highscores");
+          const data = response.data;
+          setHighscores(data);
+        } catch (error) {
+          console.error("Error fetching highscores: ", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      getHighscores();
+    }
+    else {
+      setIsModalOpen(false)
+    }
   }, [isHighscoreModalOpen]);
 
   return (
