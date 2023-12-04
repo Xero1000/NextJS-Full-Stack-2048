@@ -12,7 +12,11 @@ import isModalOpenContext from "../state-management/contexts/isModalOpenContext"
 // highscoreNameSchema
 type HighscoreForm = z.infer<typeof highscoreNameSchema>;
 
-const HighscoreSubmitForm = () => {
+interface Props {
+  handleClose: () => void
+}
+
+const HighscoreSubmitForm = ({ handleClose }: Props) => {
   const { setIsModalOpen } = useContext(isModalOpenContext)
   const { score } = useContext(scoreContext)
   const [isSubmitting, setSubmitting] = useState(false);
@@ -31,7 +35,7 @@ const HighscoreSubmitForm = () => {
       setSubmitting(true);
       const dataToSend = { ...formData, score };
       await axios.post("/api/highscores", dataToSend);
-      setIsModalOpen(false)
+      handleClose()
     } catch {
       setSubmitting(false);
     }

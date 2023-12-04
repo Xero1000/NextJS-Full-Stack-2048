@@ -241,13 +241,8 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
     });
   };
 
-  // // board is initialized with two tiles upon startup
-  // useEffect(() => {
-  //   initializeBoard();
-  // }, []);
-
-  // the following two effect hooks work together
-  // the first one resets the board data
+  // Run when user presses restart button
+  // Resets all state and context variables to initial values
   useEffect(() => {
     if (restartGame) {
       setScore(0);
@@ -264,7 +259,8 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
     }
   }, [restartGame]);
 
-  // this second effect calls initializeBoard if every tile is 0
+  // Calls initializeBoard if every tile is 0
+  // Run when page is loaded and when user presses restart button
   useEffect(() => {
     if (boardData.every(row => row.every(cell => cell === 0))) {
       initializeBoard()

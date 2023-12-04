@@ -50,7 +50,7 @@ const NavBar = ({ onHighscoreClick }: Props) => {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <button className={`${isModalOpen ? "cursor-not-allowed opacity-95": ""}`} onClick={() => { onHighscoreClick(); closeDropdown(); }} disabled={isModalOpen}>Highscores</button>
+                <button className={`${isModalOpen ? "cursor-not-allowed text-gray-400": ""}`} onClick={() => { onHighscoreClick(); closeDropdown(); }} disabled={isModalOpen}>Highscores</button>
               </li>
               <li>
                 <a>Save Game</a>
@@ -59,7 +59,7 @@ const NavBar = ({ onHighscoreClick }: Props) => {
                 <a>Load Game</a>
               </li>
               <li>
-              <button onClick={() => setRestartGame(true)}>Restart</button>
+              <button onClick={() => {setRestartGame(true); closeDropdown();}}>Restart</button>
               </li>
             </ul>
           )}
@@ -69,7 +69,7 @@ const NavBar = ({ onHighscoreClick }: Props) => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <button onClick={onHighscoreClick}>Highscores</button>
+            <button className={`${isModalOpen ? "cursor-not-allowed text-gray-400": ""}`} onClick={onHighscoreClick} disabled={isModalOpen}>Highscores</button>
           </li>
           <li>
             <a>Save Game</a>

@@ -8,8 +8,8 @@ import WinMessage from "./WinMessage";
 import LoseMessage from "./LoseMessage";
 
 interface Props {
-  win: boolean
-  lose: boolean
+  win: boolean;
+  lose: boolean;
 }
 
 const EndGameModal = ({ win, lose }: Props) => {
@@ -17,6 +17,7 @@ const EndGameModal = ({ win, lose }: Props) => {
   const { score } = useContext(scoreContext);
 
   const [showSubmit, setShowSubmit] = useState(false);
+  const [showEndGameModal, setShowEndGameModal] = useState(false);
 
   // if the end game score is greater than the current lowest
   // highscore, they can submit their highscore.
@@ -27,33 +28,43 @@ const EndGameModal = ({ win, lose }: Props) => {
       try {
         const response = await axios.get("/api/highscores");
         const highscoreData = response.data;
-       
-        // if player gets a highscore or if there are less than 10 
+
+        // if player gets a highscore or if there are less than 10
         // highscores stored, the submit form for highscores will show
-        if (highscoreData.length < 10 || score > highscoreData[highscoreData.length - 1].score)
-          setShowSubmit(true);
+        if (
+          highscoreData.length < 10 ||
+          score > highscoreData[highscoreData.length - 1].score
+        )
+        setShowSubmit(true);
       } catch (error) {
         console.error("Error fetching highscores: ", error);
       }
     };
 
-    if (win || lose)
+    if (win || lose) {
       getHighscores();
+      setShowEndGameModal(true)
+    } 
   }, [win, lose]);
 
   const handleClose = () => {
     setIsModalOpen(false);
+    setShowEndGameModal(false)
   };
 
   return (
     <div className="text-white">
-      <dialog open={isModalOpen && (win || lose)} id="end_game_modal" className="modal">
+      <dialog
+        open={showEndGameModal}
+        id="end_game_modal"
+        className="modal"
+      >
         <div className="modal-box">
           <div className="text-white text-center text-2xl">
-            {win ? <WinMessage/> : lose ? <LoseMessage /> : null}
+            {win ? <WinMessage /> : lose ? <LoseMessage /> : null}
           </div>
-          <ModalHighscoreDisplay/>
-          { showSubmit && <HighscoreSubmitForm /> }
+          <ModalHighscoreDisplay />
+          {showSubmit && <HighscoreSubmitForm handleClose={handleClose}/>}
           <div className="modal-action">
             <form method="dialog">
               <button
