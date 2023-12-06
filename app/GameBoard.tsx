@@ -6,6 +6,7 @@ import scoreContext from "./state-management/contexts/scoreContext";
 import generateTile from "./utilities/generateTile";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import restartGameContext from "./state-management/contexts/restartGameContext";
+import checkWinLose from "./utilities/checkWinLose";
 
 interface Props {
   win: boolean;
@@ -252,9 +253,9 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
         [0, 0, 0, 0],
         [0, 0, 0, 0],
       ]);
-      resetWinLose()
-      setIsModalOpen(false)
-      setGameOver(false)
+      resetWinLose();
+      setIsModalOpen(false);
+      setGameOver(false);
       setRestartGame(false);
     }
   }, [restartGame]);
@@ -262,10 +263,10 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
   // Calls initializeBoard if every tile is 0
   // Run when page is loaded and when user presses restart button
   useEffect(() => {
-    if (boardData.every(row => row.every(cell => cell === 0))) {
-      initializeBoard()
+    if (boardData.every((row) => row.every((cell) => cell === 0))) {
+      initializeBoard();
     }
-  }, [boardData])
+  }, [boardData]);
 
   // If tiles merge, the new points will be
   // added to the overall score
@@ -304,7 +305,7 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
         window.removeEventListener("keydown", handleKeyPress);
       };
     }
-  }, [isModalOpen]);
+  }, [isModalOpen, gameOver]);
 
   // disables keyboard events upon player
   // winning or losing
@@ -318,8 +319,9 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
   useEffect(() => {
     if (moveMade) {
       if (checkBoardChange()) {
-        const newBoard = generateTile(boardData, setIsModalOpen, onLose);
+        const newBoard = generateTile(boardData);
         setBoardData(newBoard);
+        checkWinLose(newBoard, setIsModalOpen, onWin, onLose)
       }
       setMoveMade(false);
     }
@@ -334,7 +336,7 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
       {boardData.map((row, rowIndex) =>
         row.map((col, colIndex) => (
           <TileContainer key={`${rowIndex}-${colIndex}`}>
-            {col !== 0 && <Tile value={col} onWin={onWin} />}
+            {col !== 0 && <Tile value={col} />}
           </TileContainer>
         ))
       )}
