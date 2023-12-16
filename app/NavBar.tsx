@@ -6,9 +6,10 @@ import Link from "next/link";
 
 interface Props {
   onHighscoreClick: () => void;
+  onSaveClick: () => void;
 }
 
-const NavBar = ({ onHighscoreClick }: Props) => {
+const NavBar = ({ onHighscoreClick, onSaveClick }: Props) => {
   const { status, data: session } = useSession();
 
   const { setRestartGame } = useContext(restartGameContext);
@@ -68,7 +69,18 @@ const NavBar = ({ onHighscoreClick }: Props) => {
                 </button>
               </li>
               <li>
-                <a>Save Game</a>
+                <button
+                  className={`${
+                    status === "unauthenticated" || isModalOpen ? "cursor-not-allowed text-gray-400" : ""
+                  }`}
+                  onClick={() => {
+                    onSaveClick();
+                    closeDropdown();
+                  }}
+                  disabled={status === "unauthenticated" || isModalOpen}
+                >
+                  Save Game
+                </button>
               </li>
               <li>
                 <a>Load Game</a>
@@ -114,7 +126,7 @@ const NavBar = ({ onHighscoreClick }: Props) => {
       </div>
       <div className="navbar-end">
         {status === "authenticated" && (
-          <div className="dropdown dropdown-bottom dropdown-end">
+          <div className="dropdown dropdown-bottom dropdown-end mr-3">
             <div tabIndex={0} role="button">
               <div className="avatar">
                 <div className="w-10 rounded-full">
