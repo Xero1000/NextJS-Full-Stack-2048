@@ -114,9 +114,24 @@ const NavBar = ({ onHighscoreClick }: Props) => {
       </div>
       <div className="navbar-end">
         {status === "authenticated" && (
-          <Link className="btn" href="/api/auth/signout">
-            Log Out
-          </Link>
+          <div className="dropdown dropdown-bottom dropdown-end">
+            <div tabIndex={0} role="button">
+              <div className="avatar">
+                <div className="w-10 rounded-full">
+                  <img src={session.user!.image!} />
+                </div>
+              </div>
+            </div>
+            <ul
+              tabIndex={0}
+              className="mt-5 dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li className="pl-4 pb-2 border-b-2">{session.user!.email}</li>
+              <li>
+                <Link href="/api/auth/signout">Log Out</Link>
+              </li>
+            </ul>
+          </div>
         )}
         {status === "unauthenticated" && (
           <Link className="btn" href="/api/auth/signin">
