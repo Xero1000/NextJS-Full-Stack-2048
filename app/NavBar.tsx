@@ -1,14 +1,18 @@
 import React, { useContext, useState } from "react";
 import restartGameContext from "./state-management/contexts/restartGameContext";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 interface Props {
   onHighscoreClick: () => void;
 }
 
 const NavBar = ({ onHighscoreClick }: Props) => {
-  const { setRestartGame } = useContext(restartGameContext)
-  const { isModalOpen } = useContext(isModalOpenContext)
+  const { status, data: session } = useSession();
+
+  const { setRestartGame } = useContext(restartGameContext);
+  const { isModalOpen } = useContext(isModalOpenContext);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -50,7 +54,18 @@ const NavBar = ({ onHighscoreClick }: Props) => {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <button className={`${isModalOpen ? "cursor-not-allowed text-gray-400": ""}`} onClick={() => { onHighscoreClick(); closeDropdown(); }} disabled={isModalOpen}>Highscores</button>
+                <button
+                  className={`${
+                    isModalOpen ? "cursor-not-allowed text-gray-400" : ""
+                  }`}
+                  onClick={() => {
+                    onHighscoreClick();
+                    closeDropdown();
+                  }}
+                  disabled={isModalOpen}
+                >
+                  Highscores
+                </button>
               </li>
               <li>
                 <a>Save Game</a>
@@ -59,7 +74,14 @@ const NavBar = ({ onHighscoreClick }: Props) => {
                 <a>Load Game</a>
               </li>
               <li>
-              <button onClick={() => {setRestartGame(true); closeDropdown();}}>Restart</button>
+                <button
+                  onClick={() => {
+                    setRestartGame(true);
+                    closeDropdown();
+                  }}
+                >
+                  Restart
+                </button>
               </li>
             </ul>
           )}
@@ -69,7 +91,15 @@ const NavBar = ({ onHighscoreClick }: Props) => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <button className={`${isModalOpen ? "cursor-not-allowed text-gray-400": ""}`} onClick={onHighscoreClick} disabled={isModalOpen}>Highscores</button>
+            <button
+              className={`${
+                isModalOpen ? "cursor-not-allowed text-gray-400" : ""
+              }`}
+              onClick={onHighscoreClick}
+              disabled={isModalOpen}
+            >
+              Highscores
+            </button>
           </li>
           <li>
             <a>Save Game</a>
@@ -83,7 +113,16 @@ const NavBar = ({ onHighscoreClick }: Props) => {
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        {status === "authenticated" && (
+          <Link className="btn" href="/api/auth/signout">
+            Log Out
+          </Link>
+        )}
+        {status === "unauthenticated" && (
+          <Link className="btn" href="/api/auth/signin">
+            Log In
+          </Link>
+        )}
       </div>
     </div>
   );
