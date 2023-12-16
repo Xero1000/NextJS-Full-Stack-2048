@@ -1,15 +1,16 @@
 "use client";
 import React, { PropsWithChildren } from "react";
 import IsModalOpenProvider from "./state-management/providers/IsModalOpenProvider";
-import RestartGameProvider from "./state-management/providers/restartGameProvider";
+import RestartGameProvider from "./state-management/providers/RestartGameProvider";
+import GameDataProvider from "./state-management/providers/GameDataProvider";
 
 const NavBarAndThemeWrapper = ({ children }: PropsWithChildren) => {
   return (
-    <RestartGameProvider>
-      <IsModalOpenProvider>
-        {children}
-      </IsModalOpenProvider>
-    </RestartGameProvider>
+    <GameDataProvider>
+      <RestartGameProvider>
+        <IsModalOpenProvider>{children}</IsModalOpenProvider>
+      </RestartGameProvider>
+    </GameDataProvider>
   );
 };
 

@@ -3,9 +3,9 @@ import React, { useContext, useEffect, useState } from "react";
 import HighscoreSubmitForm from "./components/HighscoreSubmitForm";
 import ModalHighscoreDisplay from "./components/ModalHighscoreDisplay";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
-import scoreContext from "./state-management/contexts/scoreContext";
 import WinMessage from "./WinMessage";
 import LoseMessage from "./LoseMessage";
+import gameDataContext from "./state-management/contexts/gameDataContext";
 
 interface Props {
   win: boolean;
@@ -14,7 +14,7 @@ interface Props {
 
 const EndGameModal = ({ win, lose }: Props) => {
   const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
-  const { score } = useContext(scoreContext);
+  const { score } = useContext(gameDataContext);
 
   const [showSubmit, setShowSubmit] = useState(false);
   const [showEndGameModal, setShowEndGameModal] = useState(false);

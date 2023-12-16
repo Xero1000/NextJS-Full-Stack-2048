@@ -2,11 +2,11 @@ import { Grid } from "@radix-ui/themes";
 import { useContext, useEffect, useState } from "react";
 import Tile from "./Tile";
 import TileContainer from "./TileContainer";
-import scoreContext from "./state-management/contexts/scoreContext";
 import generateTile from "./utilities/generateTile";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import restartGameContext from "./state-management/contexts/restartGameContext";
 import checkWinLose from "./utilities/checkWinLose";
+import gameDataContext from "./state-management/contexts/gameDataContext";
 
 interface Props {
   win: boolean;
@@ -17,21 +17,13 @@ interface Props {
 }
 
 const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
-  const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
-  const { setScore } = useContext(scoreContext);
-  const { restartGame, setRestartGame } = useContext(restartGameContext);
+  const { setScore } = useContext(gameDataContext);
+  const { boardData, setBoardData } = useContext(gameDataContext)
+  const { gameOver, setGameOver } = useContext(gameDataContext);
 
-  const [boardData, setBoardData] = useState([
-    // [1, 2, 1, 2],
-    // [2, 1, 2, 1],
-    // [3, 5, 3, 5],
-    // [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-  ]);
-  const [gameOver, setGameOver] = useState(false);
+  const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
+  
+  const { restartGame, setRestartGame } = useContext(restartGameContext);
 
   const [pointsToAdd, setPointsToAdd] = useState(0);
 

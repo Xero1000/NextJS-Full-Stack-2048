@@ -3,9 +3,9 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import scoreContext from "../state-management/contexts/scoreContext";
 import { highscoreNameSchema } from "../validationSchemas";
 import Spinner from "./Spinner";
+import gameDataContext from "../state-management/contexts/gameDataContext";
 
 // HighscoreForm interface is generated based on properties of
 // highscoreNameSchema
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const HighscoreSubmitForm = ({ handleClose }: Props) => {
-  const { score } = useContext(scoreContext)
+  const { score } = useContext(gameDataContext)
   const [isSubmitting, setSubmitting] = useState(false);
 
   const {
