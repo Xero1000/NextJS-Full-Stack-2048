@@ -7,9 +7,10 @@ import Link from "next/link";
 interface Props {
   onHighscoreClick: () => void;
   onSaveClick: () => void;
+  onLoadClick: () => void;
 }
 
-const NavBar = ({ onHighscoreClick, onSaveClick }: Props) => {
+const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
   const { status, data: session } = useSession();
 
   const { setRestartGame } = useContext(restartGameContext);
@@ -71,7 +72,9 @@ const NavBar = ({ onHighscoreClick, onSaveClick }: Props) => {
               <li>
                 <button
                   className={`${
-                    status === "unauthenticated" || isModalOpen ? "cursor-not-allowed text-gray-400" : ""
+                    status === "unauthenticated" || isModalOpen
+                      ? "cursor-not-allowed text-gray-400"
+                      : ""
                   }`}
                   onClick={() => {
                     onSaveClick();
@@ -83,7 +86,20 @@ const NavBar = ({ onHighscoreClick, onSaveClick }: Props) => {
                 </button>
               </li>
               <li>
-                <a>Load Game</a>
+                <button
+                  className={`${
+                    status === "unauthenticated" || isModalOpen
+                      ? "cursor-not-allowed text-gray-400"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    onLoadClick();
+                    closeDropdown();
+                  }}
+                  disabled={status === "unauthenticated" || isModalOpen}
+                >
+                  Load Game
+                </button>
               </li>
               <li>
                 <button
@@ -114,10 +130,36 @@ const NavBar = ({ onHighscoreClick, onSaveClick }: Props) => {
             </button>
           </li>
           <li>
-            <a>Save Game</a>
+            <button
+              className={`${
+                status === "unauthenticated" || isModalOpen
+                  ? "cursor-not-allowed text-gray-400"
+                  : ""
+              }`}
+              onClick={() => {
+                onSaveClick();
+                closeDropdown();
+              }}
+              disabled={status === "unauthenticated" || isModalOpen}
+            >
+              Save Game
+            </button>
           </li>
           <li>
-            <a>Load Game</a>
+            <button
+              className={`${
+                status === "unauthenticated" || isModalOpen
+                  ? "cursor-not-allowed text-gray-400"
+                  : ""
+              }`}
+              onClick={() => {
+                onLoadClick();
+                closeDropdown();
+              }}
+              disabled={status === "unauthenticated" || isModalOpen}
+            >
+              Load Game
+            </button>
           </li>
           <li>
             <button onClick={() => setRestartGame(true)}>Restart</button>

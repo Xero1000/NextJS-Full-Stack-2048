@@ -22,7 +22,7 @@ const SaveGameModal = ({ isSaveGameModalOpen, onClose }: Props) => {
           This will overrite any previous saved progress
         </p>
         <div className="flex justify-center gap-4 py-3">
-          <button className="btn">Save</button>
+          <button className="btn">Save Game</button>
           <button onClick={onClose} className="btn">Cancel</button>
         </div>
       </div>
