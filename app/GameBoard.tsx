@@ -19,20 +19,21 @@ interface Props {
 const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
   const { setScore } = useContext(gameDataContext);
   const { boardData, setBoardData } = useContext(gameDataContext)
-  const { gameOver, setGameOver } = useContext(gameDataContext);
-
+  
   const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
   
   const { restartGame, setRestartGame } = useContext(restartGameContext);
-
+  
   const [pointsToAdd, setPointsToAdd] = useState(0);
-
+  
   // previous state of the board
   const [prevBoardData, setPrevBoardData] = useState(boardData);
-
+  
   // variable to track if a move was made
   const [moveMade, setMoveMade] = useState(false);
-
+  
+  const [gameOver, setGameOver] = useState(false);
+  
   // Runs generateTile twice upon startup
   const initializeBoard = () => {
     let newBoard = generateTile(boardData);

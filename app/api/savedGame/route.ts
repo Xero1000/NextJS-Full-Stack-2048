@@ -1,0 +1,28 @@
+import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
+import authOptions from "../auth/authOptions";
+import prisma from "@/prisma/client";
+
+export async function POST(request: NextRequest) {
+    const session = await getServerSession(authOptions)
+    if (!session)
+        return NextResponse.json({}, { status: 401 })
+    
+    const body = await request.json();
+        
+    const userEmail = session.user?.email!
+    
+    const user = await prisma.user.findUnique({
+        where: {
+            email: userEmail
+        }
+    })
+    
+    const userId = user!.id
+    
+    const savedGame = await prisma.savedGame.create({
+        data: { userId: userId, boardData: body.serializedBoard, score: body.score}
+    })
+
+    return NextResponse.json(savedGame, { status: 201 })
+}
