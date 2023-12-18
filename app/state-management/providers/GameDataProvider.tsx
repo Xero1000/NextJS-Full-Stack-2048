@@ -18,7 +18,7 @@ const GameDataProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <gameDataContext.Provider
-      value={{ boardData, setBoardData, score, setScore }}
+      value={{ boardData, setBoardData, score, setScore, gameOver, setGameOver }}
     >
       {children}
     </gameDataContext.Provider>
