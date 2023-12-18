@@ -18,22 +18,21 @@ interface Props {
 
 const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
   const { setScore } = useContext(gameDataContext);
-  const { boardData, setBoardData } = useContext(gameDataContext)
+  const { boardData, setBoardData } = useContext(gameDataContext);
   const { gameOver, setGameOver } = useContext(gameDataContext);
-  
+
   const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
-  
+
   const { restartGame, setRestartGame } = useContext(restartGameContext);
-  
+
   const [pointsToAdd, setPointsToAdd] = useState(0);
-  
+
   // previous state of the board
   const [prevBoardData, setPrevBoardData] = useState(boardData);
-  
+
   // variable to track if a move was made
   const [moveMade, setMoveMade] = useState(false);
-  
-  
+
   // Runs generateTile twice upon startup
   const initializeBoard = () => {
     let newBoard = generateTile(boardData);
@@ -56,7 +55,6 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
-      setPrevBoardData(currentBoard); // save board state prior to change
       let newBoard = currentBoard.map((row) => [...row]);
       for (let r = 0; r < 4; r++) {
         let tilesWithMerge: number[] = [];
@@ -74,7 +72,7 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
                 newBoard[r][k] === newBoard[r][k + 1] &&
                 !tilesWithMerge.includes(k)
               ) {
-                newBoard[r][k] = 2048;
+                newBoard[r][k] *= 2;
                 newBoard[r][k + 1] = 0;
                 pointsGained += newBoard[r][k];
                 tilesWithMerge.push(k);
@@ -91,10 +89,10 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
           }
         }
       }
-      setPointsToAdd(pointsGained);
-      setMoveMade(true);
       return newBoard;
     });
+    setPointsToAdd(pointsGained);
+    setMoveMade(true);
   };
 
   const moveRight = () => {
@@ -102,7 +100,6 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
-      setPrevBoardData(currentBoard); // save board state prior to change
       let newBoard = currentBoard.map((row) => [...row]);
       for (let r = 0; r < 4; r++) {
         let tilesWithMerge: number[] = [];
@@ -137,10 +134,10 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
           }
         }
       }
-      setPointsToAdd(pointsGained);
-      setMoveMade(true);
       return newBoard;
     });
+    setPointsToAdd(pointsGained);
+    setMoveMade(true);
   };
 
   const moveDown = () => {
@@ -148,7 +145,6 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
-      setPrevBoardData(currentBoard); // save board state prior to change
       let newBoard = currentBoard.map((row) => [...row]);
       for (let c = 0; c < 4; c++) {
         let tilesWithMerge: number[] = [];
@@ -183,10 +179,10 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
           }
         }
       }
-      setPointsToAdd(pointsGained);
-      setMoveMade(true);
       return newBoard;
     });
+    setPointsToAdd(pointsGained);
+    setMoveMade(true);
   };
 
   const moveUp = () => {
@@ -194,7 +190,6 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
-      setPrevBoardData(currentBoard); // save board state prior to change
       let newBoard = currentBoard.map((row) => [...row]);
       for (let c = 0; c < 4; c++) {
         let tilesWithMerge: number[] = [];
@@ -229,11 +224,15 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
           }
         }
       }
-      setPointsToAdd(pointsGained);
-      setMoveMade(true);
       return newBoard;
     });
+    setPointsToAdd(pointsGained);
+    setMoveMade(true);
   };
+
+  useEffect(() => {
+    setPrevBoardData(boardData); // save board state prior to each move
+  }, [boardData]);
 
   // Run when user presses restart button
   // Resets all state and context variables to initial values
@@ -314,7 +313,7 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
       if (checkBoardChange()) {
         const newBoard = generateTile(boardData);
         setBoardData(newBoard);
-        checkWinLose(newBoard, setIsModalOpen, onWin, onLose)
+        checkWinLose(newBoard, setIsModalOpen, onWin, onLose);
       }
       setMoveMade(false);
     }

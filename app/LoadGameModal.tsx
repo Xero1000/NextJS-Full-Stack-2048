@@ -21,13 +21,14 @@ const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
     try {
       const savedGame = (await axios.get("/api/savedGame")).data;
       const boardData = JSON.parse(savedGame.boardData);
-      const score = JSON.parse(savedGame.score);
+      const score = savedGame.score;
 
       setBoardData(boardData)
       setScore(score)
       setGameOver(false)
       setWin(false)
       setLose(false)
+      onClose()
     } catch (error) {
       console.log("Error loading game: ", error);
     }
@@ -44,10 +45,7 @@ const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
         </p>
         <div className="flex justify-center gap-4 py-3">
           <button
-            onClick={() => {
-              loadGame();
-              onClose();
-            }}
+            onClick={loadGame}
             className="btn"
           >
             Load Game
