@@ -20,9 +20,11 @@ export async function POST(request: NextRequest) {
     
     const userId = user!.id
     
-    const savedGame = await prisma.savedGame.create({
-        data: { userId: userId, boardData: body.serializedBoard, score: body.score}
-    })
+    const savedGame = await prisma.savedGame.upsert({
+        where: { userId: userId },
+        update: { boardData: body.serializedBoard, score: body.score },
+        create: { userId: userId, boardData: body.serializedBoard, score: body.score },
+      });
 
     return NextResponse.json(savedGame, { status: 201 })
 }
