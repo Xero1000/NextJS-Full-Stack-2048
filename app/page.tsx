@@ -1,13 +1,14 @@
 "use client";
 import { Flex } from "@radix-ui/themes";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import EndGameModal from "./EndGameModal";
 import GameBoard from "./GameBoard";
 import Score from "./Score";
+import gameDataContext from "./state-management/contexts/gameDataContext";
 
 export default function Home() {
-  const [win, setWin] = useState(false);
-  const [lose, setLose] = useState(false);
+  const { win, setWin } = useContext(gameDataContext)
+  const { lose, setLose } = useContext(gameDataContext)
 
   const handleWin = () => {
     setWin(true);

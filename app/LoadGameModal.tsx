@@ -9,7 +9,7 @@ interface Props {
 }
 
 const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
-  const { setBoardData, setScore, setGameOver } = useContext(gameDataContext);
+  const { setBoardData, setScore, setGameOver, setWin, setLose } = useContext(gameDataContext);
   const { setIsModalOpen } = useContext(isModalOpenContext);
 
   useEffect(() => {
@@ -26,6 +26,8 @@ const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
       setBoardData(boardData)
       setScore(score)
       setGameOver(false)
+      setWin(false)
+      setLose(false)
     } catch (error) {
       console.log("Error loading game: ", error);
     }

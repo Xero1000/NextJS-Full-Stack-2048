@@ -13,12 +13,25 @@ const GameDataProvider = ({ children }: PropsWithChildren) => {
     [0, 0, 0, 0],
   ]);
 
-  const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [win, setWin] = useState(false);
+  const [lose, setLose] = useState(false);
 
   return (
     <gameDataContext.Provider
-      value={{ boardData, setBoardData, score, setScore, gameOver, setGameOver }}
+      value={{
+        boardData,
+        setBoardData,
+        score,
+        setScore,
+        gameOver,
+        setGameOver,
+        win,
+        setWin,
+        lose,
+        setLose,
+      }}
     >
       {children}
     </gameDataContext.Provider>
