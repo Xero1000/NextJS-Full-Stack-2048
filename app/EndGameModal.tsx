@@ -13,7 +13,7 @@ interface Props {
 }
 
 const EndGameModal = ({ win, lose }: Props) => {
-  const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
+  const { setIsModalOpen } = useContext(isModalOpenContext);
   const { score } = useContext(gameDataContext);
 
   const [showSubmit, setShowSubmit] = useState(false);

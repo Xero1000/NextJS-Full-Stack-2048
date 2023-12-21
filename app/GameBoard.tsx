@@ -72,7 +72,7 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
                 newBoard[r][k] === newBoard[r][k + 1] &&
                 !tilesWithMerge.includes(k)
               ) {
-                newBoard[r][k] *= 2;
+                newBoard[r][k] = 2048;
                 newBoard[r][k + 1] = 0;
                 pointsGained += newBoard[r][k];
                 tilesWithMerge.push(k);
