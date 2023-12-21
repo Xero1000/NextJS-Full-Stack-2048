@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { highscoreNameSchema } from "../validationSchemas";
-import Spinner from "./Spinner";
+import ButtonSpinner from "./ButtonSpinner";
 import gameDataContext from "../state-management/contexts/gameDataContext";
 
 // HighscoreForm interface is generated based on properties of
@@ -12,11 +12,11 @@ import gameDataContext from "../state-management/contexts/gameDataContext";
 type HighscoreForm = z.infer<typeof highscoreNameSchema>;
 
 interface Props {
-  handleClose: () => void
+  handleClose: () => void;
 }
 
 const HighscoreSubmitForm = ({ handleClose }: Props) => {
-  const { score } = useContext(gameDataContext)
+  const { score } = useContext(gameDataContext);
   const [isSubmitting, setSubmitting] = useState(false);
 
   const {
@@ -33,7 +33,7 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
       setSubmitting(true);
       const dataToSend = { ...formData, score };
       await axios.post("/api/highscores", dataToSend);
-      handleClose()
+      handleClose();
     } catch {
       setSubmitting(false);
     }
@@ -42,7 +42,10 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
   return (
     <>
       <h2 className="text-center text-xl mb-5">You got a highscore!</h2>
-      <form className="flex flex-col items-center gap-5" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col items-center gap-5"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <input
           type="text"
           placeholder="Enter your name"
@@ -57,7 +60,7 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
           disabled={isSubmitting}
         >
           Submit
-          {isSubmitting && <Spinner />}
+          {isSubmitting && <ButtonSpinner />}
         </button>
         {errors.name && <p className="text-red-600">{errors.name.message}</p>}
       </form>

@@ -1,46 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
-import axios from "axios";
 import Spinner from "./components/Spinner";
+import { useHighscores } from "./hooks/useHighscores";
 
 interface Props {
   isHighscoreModalOpen: boolean;
   onClose: () => void;
 }
 
-interface Highscore {
-  id: number;
-  name: string;
-  score: number;
-}
-
 const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
-  const { setIsModalOpen } = useContext(isModalOpenContext);
+  const { data: highscores, error, isLoading, refetch } = useHighscores();
 
-  const [highscores, setHighscores] = useState<Highscore[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsModalOpen } = useContext(isModalOpenContext);
 
   useEffect(() => {
     if (isHighscoreModalOpen) {
-      setIsLoading(true);
       setIsModalOpen(true)
-      const getHighscores = async () => {
-        try {
-          const response = await axios.get("/api/highscores");
-          const data = response.data;
-          setHighscores(data);
-        } catch (error) {
-          console.error("Error fetching highscores: ", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      getHighscores();
+      refetch() // Refetch highscores when modal opens
     }
     else {
       setIsModalOpen(false)
     }
-  }, [isHighscoreModalOpen]);
+  }, [isHighscoreModalOpen, refetch])
 
   return (
     <div>
@@ -49,9 +30,13 @@ const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
           <h3 className="font-bold text-2xl text-center mb-5">Highscores</h3>
           <div className="overflow-x-auto">
             {isLoading ? (
-              <div className="mt-5 text-center">
+              <div className="mt-5 text-center py-2">
                 <Spinner />
               </div>
+            ) : error ? (
+              <p className="text-center text-red-600">
+                Error fetching highscores
+              </p>
             ) : (
               <table className="table table-zebra text-center">
                 {/* head */}
@@ -63,7 +48,7 @@ const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
                   </tr>
                 </thead>
                 <tbody className="text-lg">
-                  {highscores.map((highscore, index) => (
+                  {highscores?.map((highscore, index) => (
                     <tr key={highscore.id}>
                       <td>{index + 1}</td>
                       <td>{highscore.name}</td>
