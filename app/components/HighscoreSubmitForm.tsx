@@ -1,23 +1,24 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { highscoreNameSchema } from "../validationSchemas";
 import ButtonSpinner from "./ButtonSpinner";
 import gameDataContext from "../state-management/contexts/gameDataContext";
-
-// HighscoreForm interface is generated based on properties of
-// highscoreNameSchema
-type HighscoreForm = z.infer<typeof highscoreNameSchema>;
+import { useMutation } from "@tanstack/react-query";
 
 interface Props {
   handleClose: () => void;
 }
 
+// HighscoreForm interface is generated based on properties of
+// highscoreNameSchema
+type HighscoreForm = z.infer<typeof highscoreNameSchema>;
+
 const HighscoreSubmitForm = ({ handleClose }: Props) => {
   const { score } = useContext(gameDataContext);
-  const [isSubmitting, setSubmitting] = useState(false);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const {
     register,
@@ -28,15 +29,38 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
     resolver: zodResolver(highscoreNameSchema),
   });
 
-  const onSubmit = async (formData: HighscoreForm) => {
-    try {
-      setSubmitting(true);
-      const dataToSend = { ...formData, score };
-      await axios.post("/api/highscores", dataToSend);
-      handleClose();
-    } catch {
-      setSubmitting(false);
+  // mutation function
+  const submitHighscore = async (formData: HighscoreForm): Promise<void> => {
+    const data = { ...formData, score };
+    await axios.post("/api/highscores", data);
+  };
+
+  // mutation hook
+  const postHighscore = useMutation<void, Error, HighscoreForm>({
+    mutationFn: submitHighscore,
+    onSuccess: () => {
+      // if highscore submission succeeds, modal will close after 1 second
+      const id = setTimeout(() => {
+        handleClose()
+      }, 1000)
+      setTimeoutId(id)
+    },
+    retry: 3
+  });
+
+  // if the user closes the modal before 1 second passes after a
+  // successful submission, the timeout will be cleared to avoid
+  // issues with trying to update the state of an unmounted component
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
     }
+  }, [timeoutId])
+
+  const onSubmit = async (formData: HighscoreForm) => {
+    postHighscore.mutate(formData);
   };
 
   return (
@@ -55,14 +79,29 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
         <button
           type="submit"
           className={`btn ml-5 ${
-            isSubmitting ? "cursor-not-allowed opacity-95" : ""
+            postHighscore.status === "pending" ||
+            postHighscore.status === "success"
+              ? "cursor-not-allowed opacity-95"
+              : ""
           }`}
-          disabled={isSubmitting}
+          disabled={
+            postHighscore.status === "pending" ||
+            postHighscore.status === "success"
+          }
         >
-          Submit
-          {isSubmitting && <ButtonSpinner />}
+          {postHighscore.status === "pending" ? (
+            <>
+              Submitting
+              <ButtonSpinner />
+            </>
+          ) : postHighscore.status === "success" ? (
+            "Submitted"
+          ) : (
+            "Submit"
+          )}
         </button>
         {errors.name && <p className="text-red-600">{errors.name.message}</p>}
+        {postHighscore.error && <p className="text-red-600">Failed to submit highscore</p>}
       </form>
     </>
   );
