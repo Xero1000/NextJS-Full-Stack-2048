@@ -59,7 +59,7 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
     }
   }, [timeoutId])
 
-  const onSubmit = async (formData: HighscoreForm) => {
+  const onSubmit = (formData: HighscoreForm) => {
     postHighscore.mutate(formData);
   };
 
