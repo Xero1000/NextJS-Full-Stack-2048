@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
-import restartGameContext from "./state-management/contexts/restartGameContext";
-import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useContext, useState } from "react";
+import { GoQuestion } from "react-icons/go";
 import gameDataContext from "./state-management/contexts/gameDataContext";
+import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
+import restartGameContext from "./state-management/contexts/restartGameContext";
 
 interface Props {
   onHighscoreClick: () => void;
@@ -19,6 +20,8 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
   const { isModalOpen } = useContext(isModalOpenContext);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const avatar = session?.user!.image!;
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -192,7 +195,13 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
             <div tabIndex={0} role="button">
               <div className="avatar">
                 <div className="w-10 rounded-full">
-                  <img src={session.user!.image!} />
+                  {avatar ? (
+                    <img src={avatar} alt="avatar" />
+                  ) : (
+                    <div className="flex h-10 justify-center items-center">
+                      <GoQuestion size={40} />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

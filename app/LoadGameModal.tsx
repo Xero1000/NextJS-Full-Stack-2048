@@ -107,7 +107,7 @@ const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
         ) : (
           ""
         )}
-        <div className="flex justify-center gap-4 py-3">
+        <div className="flex justify-center gap-4 py-3 mt-3">
           <button
             onClick={loadGame}
             className={"btn"}

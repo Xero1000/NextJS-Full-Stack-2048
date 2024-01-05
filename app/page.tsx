@@ -1,6 +1,6 @@
 "use client";
 import { Flex } from "@radix-ui/themes";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import EndGameModal from "./EndGameModal";
 import GameBoard from "./GameBoard";
 import Score from "./Score";
