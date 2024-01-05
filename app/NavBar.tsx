@@ -111,15 +111,13 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
               <li>
                 <button
                   className={`${
-                    status === "unauthenticated" || isModalOpen
-                      ? "cursor-not-allowed text-gray-400"
-                      : ""
+                    isModalOpen ? "cursor-not-allowed text-gray-400" : ""
                   }`}
                   onClick={() => {
                     setRestartGame(true);
                     closeDropdown();
                   }}
-                  disabled={status === "unauthenticated" || isModalOpen}
+                  disabled={isModalOpen}
                 >
                   Restart
                 </button>
@@ -177,12 +175,10 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
           <li>
             <button
               className={`${
-                status === "unauthenticated" || isModalOpen
-                  ? "cursor-not-allowed text-gray-400"
-                  : ""
+                isModalOpen ? "cursor-not-allowed text-gray-400" : ""
               }`}
               onClick={() => setRestartGame(true)}
-              disabled={status === "unauthenticated" || isModalOpen}
+              disabled={isModalOpen}
             >
               Restart
             </button>
