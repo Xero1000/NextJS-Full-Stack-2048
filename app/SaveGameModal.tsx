@@ -16,7 +16,7 @@ interface SaveGameData {
 
 const SaveGameModal = ({ isSaveGameModalOpen, onClose }: Props) => {
   const { setIsModalOpen } = useContext(isModalOpenContext);
-  const { boardData, score } = useContext(gameDataContext);
+  const { boardData, score, gameOver } = useContext(gameDataContext);
   const [showError, setShowError] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 

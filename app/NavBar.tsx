@@ -3,6 +3,7 @@ import restartGameContext from "./state-management/contexts/restartGameContext";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import gameDataContext from "./state-management/contexts/gameDataContext";
 
 interface Props {
   onHighscoreClick: () => void;
@@ -13,6 +14,7 @@ interface Props {
 const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
   const { status, data: session } = useSession();
 
+  const { gameOver } = useContext(gameDataContext);
   const { setRestartGame } = useContext(restartGameContext);
   const { isModalOpen } = useContext(isModalOpenContext);
 
@@ -72,7 +74,7 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
               <li>
                 <button
                   className={`${
-                    status === "unauthenticated" || isModalOpen
+                    status === "unauthenticated" || isModalOpen || gameOver
                       ? "cursor-not-allowed text-gray-400"
                       : ""
                   }`}
@@ -80,7 +82,9 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
                     onSaveClick();
                     closeDropdown();
                   }}
-                  disabled={status === "unauthenticated" || isModalOpen}
+                  disabled={
+                    status === "unauthenticated" || isModalOpen || gameOver
+                  }
                 >
                   Save Game
                 </button>
@@ -103,10 +107,16 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
               </li>
               <li>
                 <button
+                  className={`${
+                    status === "unauthenticated" || isModalOpen
+                      ? "cursor-not-allowed text-gray-400"
+                      : ""
+                  }`}
                   onClick={() => {
                     setRestartGame(true);
                     closeDropdown();
                   }}
+                  disabled={status === "unauthenticated" || isModalOpen}
                 >
                   Restart
                 </button>
@@ -132,7 +142,7 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
           <li>
             <button
               className={`${
-                status === "unauthenticated" || isModalOpen
+                status === "unauthenticated" || isModalOpen || gameOver
                   ? "cursor-not-allowed text-gray-400"
                   : ""
               }`}
@@ -140,7 +150,7 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
                 onSaveClick();
                 closeDropdown();
               }}
-              disabled={status === "unauthenticated" || isModalOpen}
+              disabled={status === "unauthenticated" || isModalOpen || gameOver}
             >
               Save Game
             </button>
@@ -162,7 +172,17 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
             </button>
           </li>
           <li>
-            <button onClick={() => setRestartGame(true)}>Restart</button>
+            <button
+              className={`${
+                status === "unauthenticated" || isModalOpen
+                  ? "cursor-not-allowed text-gray-400"
+                  : ""
+              }`}
+              onClick={() => setRestartGame(true)}
+              disabled={status === "unauthenticated" || isModalOpen}
+            >
+              Restart
+            </button>
           </li>
         </ul>
       </div>

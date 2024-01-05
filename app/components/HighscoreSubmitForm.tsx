@@ -30,7 +30,7 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
   });
 
   // mutation function
-  const submitHighscore = async (formData: HighscoreForm): Promise<void> => {
+  const submitHighscore = async (formData: HighscoreForm) => {
     const data = { ...formData, score };
     await axios.post("/api/highscores", data);
   };
