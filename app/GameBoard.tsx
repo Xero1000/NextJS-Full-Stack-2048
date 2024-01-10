@@ -17,9 +17,8 @@ interface Props {
 }
 
 const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
-  const { setScore } = useContext(gameDataContext);
-  const { boardData, setBoardData } = useContext(gameDataContext);
-  const { gameOver, setGameOver } = useContext(gameDataContext);
+  const { boardData, setBoardData, gameOver, setGameOver, setScore } =
+    useContext(gameDataContext);
 
   const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
 

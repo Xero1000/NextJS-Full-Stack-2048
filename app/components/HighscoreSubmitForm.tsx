@@ -78,7 +78,7 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
         />
         <button
           type="submit"
-          className={`btn ml-5 ${
+          className={`btn ${
             postHighscore.status === "pending" ||
             postHighscore.status === "success"
               ? "cursor-not-allowed opacity-95"

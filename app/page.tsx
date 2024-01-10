@@ -38,7 +38,7 @@ export default function Home() {
         onLose={handleLose}
         resetWinLose={resetWinLose}
       />
-      <EndGameModal win={win} lose={lose} />
+      <EndGameModal win={win} lose={lose} resetWinLose={resetWinLose}/>
     </Flex>
   );
 }
