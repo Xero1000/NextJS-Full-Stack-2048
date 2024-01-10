@@ -9,13 +9,7 @@ import gameDataContext from "./state-management/contexts/gameDataContext";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import restartGameContext from "./state-management/contexts/restartGameContext";
 
-interface Props {
-  win: boolean;
-  lose: boolean;
-  resetWinLose: () => void;
-}
-
-const EndGameModal = ({ win, lose, resetWinLose }: Props) => {
+const EndGameModal = () => {
   const {
     data: highscores,
     error,
@@ -23,7 +17,7 @@ const EndGameModal = ({ win, lose, resetWinLose }: Props) => {
   } = useHighscores()
 
   const { setIsModalOpen } = useContext(isModalOpenContext);
-  const { score, setScore, setBoardData, setGameOver } = useContext(gameDataContext);
+  const { score, setScore, setBoardData, setGameOver, win, setWin, lose, setLose } = useContext(gameDataContext);
   const { restartGame, setRestartGame } = useContext(restartGameContext);
 
   const [showEndGameModal, setShowEndGameModal] = useState(false);
@@ -45,7 +39,6 @@ const EndGameModal = ({ win, lose, resetWinLose }: Props) => {
   // Run when user presses restart button
   // Resets all state and context variables to initial values
   useEffect(() => {
-    console.log(restartGame)
     if (restartGame) {
       setScore(0);
       setBoardData([
@@ -54,7 +47,8 @@ const EndGameModal = ({ win, lose, resetWinLose }: Props) => {
         [0, 0, 0, 0],
         [0, 0, 0, 0],
       ]);
-      resetWinLose();
+      setWin(false)
+      setLose(false)
       setIsModalOpen(false);
       setGameOver(false);
       setRestartGame(false);

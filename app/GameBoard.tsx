@@ -2,22 +2,14 @@ import { Grid } from "@radix-ui/themes";
 import { useContext, useEffect, useState } from "react";
 import Tile from "./Tile";
 import TileContainer from "./TileContainer";
-import generateTile from "./utilities/generateTile";
+import gameDataContext from "./state-management/contexts/gameDataContext";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import restartGameContext from "./state-management/contexts/restartGameContext";
 import checkWinLose from "./utilities/checkWinLose";
-import gameDataContext from "./state-management/contexts/gameDataContext";
+import generateTile from "./utilities/generateTile";
 
-interface Props {
-  win: boolean;
-  lose: boolean;
-  onWin: () => void;
-  onLose: () => void;
-  resetWinLose: () => void;
-}
-
-const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
-  const { boardData, setBoardData, gameOver, setGameOver, setScore } =
+const GameBoard = () => {
+  const { boardData, setBoardData, gameOver, setGameOver, setScore, win, setWin, lose, setLose } =
     useContext(gameDataContext);
 
   const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
@@ -229,6 +221,14 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
     setMoveMade(true);
   };
 
+  const handleWin = () => {
+    setWin(true);
+  };
+
+  const handleLose = () => {
+    setLose(true);
+  };
+
   useEffect(() => {
     setPrevBoardData(boardData); // save board state prior to each move
   }, [boardData]);
@@ -244,7 +244,8 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
         [0, 0, 0, 0],
         [0, 0, 0, 0],
       ]);
-      resetWinLose();
+      setWin(false)
+      setLose(false)
       setIsModalOpen(false);
       setGameOver(false);
       setRestartGame(false);
@@ -312,7 +313,7 @@ const GameBoard = ({ win, lose, onWin, onLose, resetWinLose }: Props) => {
       if (checkBoardChange()) {
         const newBoard = generateTile(boardData);
         setBoardData(newBoard);
-        checkWinLose(newBoard, setIsModalOpen, onWin, onLose);
+        checkWinLose(newBoard, setIsModalOpen, handleWin, handleLose);
       }
       setMoveMade(false);
     }
