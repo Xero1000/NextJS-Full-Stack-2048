@@ -7,6 +7,7 @@ import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import restartGameContext from "./state-management/contexts/restartGameContext";
 import checkWinLose from "./utilities/checkWinLose";
 import generateTile from "./utilities/generateTile";
+import useRestartGame from "./hooks/useRestartGame";
 
 const GameBoard = () => {
   const { boardData, setBoardData, gameOver, setGameOver, setScore, win, setWin, lose, setLose } =
@@ -14,7 +15,7 @@ const GameBoard = () => {
 
   const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
 
-  const { restartGame, setRestartGame } = useContext(restartGameContext);
+  const { restartGame } = useContext(restartGameContext);
 
   const [pointsToAdd, setPointsToAdd] = useState(0);
 
@@ -233,24 +234,7 @@ const GameBoard = () => {
     setPrevBoardData(boardData); // save board state prior to each move
   }, [boardData]);
 
-  // Run when user presses restart button
-  // Resets all state and context variables to initial values
-  useEffect(() => {
-    if (restartGame) {
-      setScore(0);
-      setBoardData([
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-      ]);
-      setWin(false)
-      setLose(false)
-      setIsModalOpen(false);
-      setGameOver(false);
-      setRestartGame(false);
-    }
-  }, [restartGame]);
+  useRestartGame(restartGame)
 
   // Calls initializeBoard if every tile is 0
   // Run when page is loaded and when user presses restart button

@@ -8,6 +8,7 @@ import { useHighscores } from "./hooks/useHighscores";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import restartGameContext from "./state-management/contexts/restartGameContext";
+import useRestartGame from "./hooks/useRestartGame";
 
 const EndGameModal = () => {
   const {
@@ -17,7 +18,7 @@ const EndGameModal = () => {
   } = useHighscores()
 
   const { setIsModalOpen } = useContext(isModalOpenContext);
-  const { score, setScore, setBoardData, setGameOver, win, setWin, lose, setLose } = useContext(gameDataContext);
+  const { score, win, lose} = useContext(gameDataContext);
   const { restartGame, setRestartGame } = useContext(restartGameContext);
 
   const [showEndGameModal, setShowEndGameModal] = useState(false);
@@ -36,24 +37,7 @@ const EndGameModal = () => {
     }
   }, [win, lose]);
 
-  // Run when user presses restart button
-  // Resets all state and context variables to initial values
-  useEffect(() => {
-    if (restartGame) {
-      setScore(0);
-      setBoardData([
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-      ]);
-      setWin(false)
-      setLose(false)
-      setIsModalOpen(false);
-      setGameOver(false);
-      setRestartGame(false);
-    }
-  }, [restartGame]);
+  useRestartGame(restartGame)
 
   useEffect(() => {
     if (restartGame) {

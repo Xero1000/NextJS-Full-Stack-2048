@@ -16,7 +16,7 @@ interface SaveGameData {
 
 const SaveGameModal = ({ isSaveGameModalOpen, onClose }: Props) => {
   const { setIsModalOpen } = useContext(isModalOpenContext);
-  const { boardData, score, gameOver } = useContext(gameDataContext);
+  const { boardData, score } = useContext(gameDataContext);
   const [showError, setShowError] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
@@ -39,6 +39,7 @@ const SaveGameModal = ({ isSaveGameModalOpen, onClose }: Props) => {
     const serializedBoard = JSON.stringify(boardData)
     submitGameData.mutate({ serializedBoard, score })
   }
+  
 
   const closeModal = () => {
     // Keep error message open as modal closes
