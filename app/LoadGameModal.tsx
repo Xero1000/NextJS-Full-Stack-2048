@@ -5,6 +5,7 @@ import gameDataContext from "./state-management/contexts/gameDataContext";
 import { useQuery } from "@tanstack/react-query";
 import { SavedGame } from "@prisma/client";
 import Spinner from "./components/Spinner";
+import useCloseModalTimeout from "./hooks/useCloseModalTimeout";
 
 interface Props {
   isLoadGameModalOpen: boolean;
@@ -28,7 +29,6 @@ const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
   });
 
   const [noSavedGame, setNoSavedGame] = useState(false);
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (isLoadGameModalOpen) {
@@ -38,17 +38,6 @@ const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
       setIsModalOpen(false);
     }
   }, [isLoadGameModalOpen]);
-
-  // Cleanup function to clear the timeout
-  // This is to prevent potential side effects if the component unmounts
-  // before the timeout completes.
-  useEffect(() => {
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [timeoutId]);
 
   const loadGame = async () => {
     if (error) {
@@ -73,14 +62,11 @@ const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
     onClose();
   };
 
-  const closeModal = () => {
-    // Keep NoSavedGame message open as modal closes
-    const id = setTimeout(() => {
-      setNoSavedGame(false);
-    }, 1000);
-    setTimeoutId(id);
-    onClose(); // close the modal
-  };
+  const closeNoSaveMessage = () => {
+    setNoSavedGame(false)
+  }
+
+  const closeModal = useCloseModalTimeout(onClose, closeNoSaveMessage)
 
   return (
     <dialog id="load_game_modal" className="modal" open={isLoadGameModalOpen}>

@@ -3,6 +3,7 @@ import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
+import useCloseModalTimeout from "./hooks/useCloseModalTimeout";
 
 interface Props {
   isSaveGameModalOpen: boolean;
@@ -18,7 +19,6 @@ const SaveGameModal = ({ isSaveGameModalOpen, onClose }: Props) => {
   const { setIsModalOpen } = useContext(isModalOpenContext);
   const { boardData, score } = useContext(gameDataContext);
   const [showError, setShowError] = useState(false);
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const saveGame = async (data: SaveGameData) => {
     await axios.post("/api/savedGame", data);
@@ -39,27 +39,12 @@ const SaveGameModal = ({ isSaveGameModalOpen, onClose }: Props) => {
     const serializedBoard = JSON.stringify(boardData)
     submitGameData.mutate({ serializedBoard, score })
   }
-  
 
-  const closeModal = () => {
-    // Keep error message open as modal closes
-    const id = setTimeout(() => {
-      setShowError(false);
-    }, 1000);
-    setTimeoutId(id);
-    onClose(); // close the modal
-  };
+  const closeErrorMessage = () => {
+    setShowError(false)
+  }
 
-  // Cleanup function to clear the timeout
-  // This is to prevent potential side effects if the component unmounts
-  // before the timeout completes.
-  useEffect(() => {
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [timeoutId]);
+  const closeModal = useCloseModalTimeout(onClose, closeErrorMessage)
 
   useEffect(() => {
     if (isSaveGameModalOpen) setIsModalOpen(true);
