@@ -3,9 +3,9 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { highscoreNameSchema } from "../validationSchemas";
+import { highscoreNameSchema } from "./validationSchemas";
 import ButtonSpinner from "./ButtonSpinner";
-import gameDataContext from "../state-management/contexts/gameDataContext";
+import gameDataContext from "./state-management/contexts/gameDataContext";
 import { useMutation } from "@tanstack/react-query";
 
 interface Props {
@@ -41,11 +41,11 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
     onSuccess: () => {
       // if highscore submission succeeds, modal will close after 1 second
       const id = setTimeout(() => {
-        handleClose()
-      }, 1000)
-      setTimeoutId(id)
+        handleClose();
+      }, 1000);
+      setTimeoutId(id);
     },
-    retry: 3
+    retry: 3,
   });
 
   // if the user closes the modal before 1 second passes after a
@@ -54,10 +54,10 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
   useEffect(() => {
     return () => {
       if (timeoutId) {
-        clearTimeout(timeoutId)
+        clearTimeout(timeoutId);
       }
-    }
-  }, [timeoutId])
+    };
+  }, [timeoutId]);
 
   const onSubmit = (formData: HighscoreForm) => {
     postHighscore.mutate(formData);
@@ -101,7 +101,9 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
           )}
         </button>
         {errors.name && <p className="text-red-600">{errors.name.message}</p>}
-        {postHighscore.error && <p className="text-red-600">Failed to submit highscore</p>}
+        {postHighscore.error && (
+          <p className="text-red-600">Failed to submit highscore</p>
+        )}
       </form>
     </>
   );

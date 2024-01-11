@@ -20,16 +20,21 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
   const { isModalOpen } = useContext(isModalOpenContext);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const [avatarMissing, setAvatarMissing] = useState(false)
+  
   const avatar = session?.user!.image!;
-
+  
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
-
+  
   const closeDropdown = () => {
     setDropdownOpen(false);
   };
+  
+  const handleAvatarMissing = () => {
+    setAvatarMissing(true)
+  }
 
   return (
     <div className="navbar bg-base-100 fixed z-10 text-white">
@@ -191,8 +196,8 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
             <div tabIndex={0} role="button">
               <div className="avatar">
                 <div className="w-10 rounded-full">
-                  {avatar ? (
-                    <img src={avatar} alt="avatar" />
+                  {!avatarMissing ? (
+                    <img src={avatar} alt="avatar" onError={handleAvatarMissing}/>
                   ) : (
                     <div className="flex h-10 justify-center items-center">
                       <GoQuestion size={40} />

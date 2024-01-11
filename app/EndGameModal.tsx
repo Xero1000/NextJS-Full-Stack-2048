@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import LoseMessage from "./LoseMessage";
 import WinMessage from "./WinMessage";
-import HighscoreSubmitForm from "./components/HighscoreSubmitForm";
-import ModalHighscoreDisplay from "./components/ModalHighscoreDisplay";
-import Spinner from "./components/Spinner";
+import HighscoreSubmitForm from "./HighscoreSubmitForm";
+import ModalHighscoreDisplay from "./ModalHighscoreDisplay";
+import Spinner from "./Spinner";
 import { useHighscores } from "./hooks/useHighscores";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
@@ -11,14 +11,10 @@ import restartGameContext from "./state-management/contexts/restartGameContext";
 import useRestartGame from "./hooks/useRestartGame";
 
 const EndGameModal = () => {
-  const {
-    data: highscores,
-    error,
-    isLoading,
-  } = useHighscores()
+  const { data: highscores, error, isLoading } = useHighscores();
 
   const { setIsModalOpen } = useContext(isModalOpenContext);
-  const { score, win, lose} = useContext(gameDataContext);
+  const { score, win, lose } = useContext(gameDataContext);
   const { restartGame, setRestartGame } = useContext(restartGameContext);
 
   const [showEndGameModal, setShowEndGameModal] = useState(false);
@@ -37,14 +33,14 @@ const EndGameModal = () => {
     }
   }, [win, lose]);
 
-  useRestartGame(restartGame)
+  useRestartGame(restartGame);
 
   useEffect(() => {
     if (restartGame) {
-      setShowEndGameModal(false)
-      setRestartGame(false)
+      setShowEndGameModal(false);
+      setRestartGame(false);
     }
-  }, [restartGame])
+  }, [restartGame]);
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -71,7 +67,9 @@ const EndGameModal = () => {
             <HighscoreSubmitForm handleClose={handleClose} />
           ) : null}
           <div className={`flex justify-center ${showSubmit ? "mt-5" : null}`}>
-            <button className="btn" onClick={() => setRestartGame(true)}>Restart Game?</button>
+            <button className="btn" onClick={() => setRestartGame(true)}>
+              Restart Game?
+            </button>
           </div>
           <div className="modal-action">
             <form method="dialog">

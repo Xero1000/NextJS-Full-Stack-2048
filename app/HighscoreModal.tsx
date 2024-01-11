@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
-import Spinner from "./components/Spinner";
+import Spinner from "./Spinner";
 import { useHighscores } from "./hooks/useHighscores";
 
 interface Props {
@@ -15,13 +15,12 @@ const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
 
   useEffect(() => {
     if (isHighscoreModalOpen) {
-      setIsModalOpen(true)
-      refetch() // Refetch highscores when modal opens
+      setIsModalOpen(true);
+      refetch(); // Refetch highscores when modal opens
+    } else {
+      setIsModalOpen(false);
     }
-    else {
-      setIsModalOpen(false)
-    }
-  }, [isHighscoreModalOpen, refetch])
+  }, [isHighscoreModalOpen, refetch]);
 
   return (
     <div>

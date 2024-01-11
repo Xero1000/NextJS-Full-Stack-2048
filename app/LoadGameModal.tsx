@@ -4,7 +4,7 @@ import axios from "axios";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 import { useQuery } from "@tanstack/react-query";
 import { SavedGame } from "@prisma/client";
-import Spinner from "./components/Spinner";
+import Spinner from "./Spinner";
 import useCloseModalTimeout from "./hooks/useCloseModalTimeout";
 
 interface Props {
@@ -63,10 +63,10 @@ const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
   };
 
   const closeNoSaveMessage = () => {
-    setNoSavedGame(false)
-  }
+    setNoSavedGame(false);
+  };
 
-  const closeModal = useCloseModalTimeout(onClose, closeNoSaveMessage)
+  const closeModal = useCloseModalTimeout(onClose, closeNoSaveMessage);
 
   return (
     <dialog id="load_game_modal" className="modal" open={isLoadGameModalOpen}>
