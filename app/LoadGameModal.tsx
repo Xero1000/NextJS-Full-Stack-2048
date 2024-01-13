@@ -9,10 +9,10 @@ import useCloseModalTimeout from "./hooks/useCloseModalTimeout";
 
 interface Props {
   isLoadGameModalOpen: boolean;
-  onClose: () => void;
+  setIsLoadGameModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
+const LoadGameModal = ({ isLoadGameModalOpen, setIsLoadGameModalOpen }: Props) => {
   const { setBoardData, setScore, setGameOver, setWin, setLose } =
     useContext(gameDataContext);
   const { setIsModalOpen } = useContext(isModalOpenContext);
@@ -59,14 +59,14 @@ const LoadGameModal = ({ isLoadGameModalOpen, onClose }: Props) => {
     setGameOver(false);
     setWin(false);
     setLose(false);
-    onClose();
+    setIsLoadGameModalOpen(false);
   };
 
   const closeNoSaveMessage = () => {
     setNoSavedGame(false);
   };
 
-  const closeModal = useCloseModalTimeout(onClose, closeNoSaveMessage);
+  const closeModal = useCloseModalTimeout(setIsLoadGameModalOpen, closeNoSaveMessage);
 
   return (
     <dialog id="load_game_modal" className="modal" open={isLoadGameModalOpen}>

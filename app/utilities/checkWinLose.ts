@@ -1,14 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
 
-const checkWinLose = (newBoard: number[][], setIsModalOpen: Dispatch<SetStateAction<boolean>>, setWin: () => void, setLose: () => void) => {
+const checkWinLose = (newBoard: number[][], setIsModalOpen: Dispatch<SetStateAction<boolean>>, setWin: Dispatch<SetStateAction<boolean>>, setLose: Dispatch<SetStateAction<boolean>>) => {
   const win = checkWin(newBoard)
   const lose = checkLose(newBoard)
 
   if (win || lose) {
     if (win)
-      setWin()
+      setWin(true)
     else if (lose)
-      setLose()
+      setLose(true)
     setIsModalOpen(true)
   }
 }

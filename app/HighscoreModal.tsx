@@ -5,10 +5,10 @@ import { useHighscores } from "./hooks/useHighscores";
 
 interface Props {
   isHighscoreModalOpen: boolean;
-  onClose: () => void;
+  setIsHighscoreModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
+const HighscoreModal = ({ isHighscoreModalOpen, setIsHighscoreModalOpen }: Props) => {
   const { data: highscores, error, isLoading, refetch } = useHighscores();
 
   const { setIsModalOpen } = useContext(isModalOpenContext);
@@ -60,7 +60,7 @@ const HighscoreModal = ({ isHighscoreModalOpen, onClose }: Props) => {
           </div>
         </div>
         <form method="dialog" className="modal-backdrop">
-          <button onClick={onClose}>close</button>
+          <button onClick={() => setIsHighscoreModalOpen(false)}>close</button>
         </form>
       </dialog>
     </div>

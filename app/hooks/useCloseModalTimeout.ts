@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useCloseModalTimeout = (onClose: () => void, closeMessage: () => void) => {
+const useCloseModalTimeout = (onClose: React.Dispatch<React.SetStateAction<boolean>>, closeMessage: () => void) => {
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
     const closeModal = () => {
@@ -9,7 +9,7 @@ const useCloseModalTimeout = (onClose: () => void, closeMessage: () => void) => 
           closeMessage();
         }, 1000);
         setTimeoutId(id);
-        onClose(); // close the modal
+        onClose(false); // close the modal
       };
     
       // Cleanup function to clear the timeout

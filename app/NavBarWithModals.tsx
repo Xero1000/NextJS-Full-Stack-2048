@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import NavBar from "./NavBar";
 import HighscoreModal from "./HighscoreModal";
 import SaveGameModal from "./SaveGameModal";
@@ -10,36 +10,12 @@ const NavBarWithModals = () => {
   const [isSaveGameModalOpen, setIsSaveGameModalOpen] = useState(false)
   const [isLoadGameModalOpen, setIsLoadGameModalOpen] = useState(false)
 
-  const handleOpenHighscoreModal = () => {
-    setIsHighscoreModalOpen(true);
-  };
-
-  const handleCloseHighscoreModal = () => {
-    setIsHighscoreModalOpen(false);
-  };
-
-  const handleOpenSaveGameModal = () => {
-    setIsSaveGameModalOpen(true);
-  };
-
-  const handleCloseSaveGameModal = () => {
-    setIsSaveGameModalOpen(false);
-  };
-
-  const handleOpenLoadGameModal = () => {
-    setIsLoadGameModalOpen(true);
-  };
-
-  const handleCloseLoadGameModal = () => {
-    setIsLoadGameModalOpen(false);
-  };
-
   return (
     <>
-      <NavBar onHighscoreClick={handleOpenHighscoreModal} onSaveClick={handleOpenSaveGameModal} onLoadClick={handleOpenLoadGameModal} />
-      <HighscoreModal isHighscoreModalOpen={isHighscoreModalOpen} onClose={handleCloseHighscoreModal} />
-      <SaveGameModal isSaveGameModalOpen={isSaveGameModalOpen} onClose={handleCloseSaveGameModal} />
-      <LoadGameModal isLoadGameModalOpen={isLoadGameModalOpen} onClose={handleCloseLoadGameModal} />
+      <NavBar setIsHighScoreModalOpen={setIsHighscoreModalOpen} setIsSaveGameModalOpen={setIsSaveGameModalOpen} setIsLoadGameModalOpen={setIsLoadGameModalOpen} />
+      <HighscoreModal isHighscoreModalOpen={isHighscoreModalOpen} setIsHighscoreModalOpen={setIsHighscoreModalOpen} />
+      <SaveGameModal isSaveGameModalOpen={isSaveGameModalOpen} setIsSaveGameModalOpen={setIsSaveGameModalOpen} />
+      <LoadGameModal isLoadGameModalOpen={isLoadGameModalOpen} setIsLoadGameModalOpen={setIsLoadGameModalOpen} />
     </>
   );
 };

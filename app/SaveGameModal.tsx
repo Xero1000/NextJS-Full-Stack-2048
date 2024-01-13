@@ -7,7 +7,7 @@ import useCloseModalTimeout from "./hooks/useCloseModalTimeout";
 
 interface Props {
   isSaveGameModalOpen: boolean;
-  onClose: () => void;
+  setIsSaveGameModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface SaveGameData {
@@ -15,7 +15,7 @@ interface SaveGameData {
   score: number;
 }
 
-const SaveGameModal = ({ isSaveGameModalOpen, onClose }: Props) => {
+const SaveGameModal = ({ isSaveGameModalOpen, setIsSaveGameModalOpen }: Props) => {
   const { setIsModalOpen } = useContext(isModalOpenContext);
   const { boardData, score } = useContext(gameDataContext);
   const [showError, setShowError] = useState(false);
@@ -44,7 +44,7 @@ const SaveGameModal = ({ isSaveGameModalOpen, onClose }: Props) => {
     setShowError(false)
   }
 
-  const closeModal = useCloseModalTimeout(onClose, closeErrorMessage)
+  const closeModal = useCloseModalTimeout(setIsSaveGameModalOpen, closeErrorMessage)
 
   useEffect(() => {
     if (isSaveGameModalOpen) setIsModalOpen(true);

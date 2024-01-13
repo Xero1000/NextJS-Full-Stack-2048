@@ -7,12 +7,12 @@ import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import restartGameContext from "./state-management/contexts/restartGameContext";
 
 interface Props {
-  onHighscoreClick: () => void;
-  onSaveClick: () => void;
-  onLoadClick: () => void;
+  setIsHighScoreModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSaveGameModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoadGameModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
+const NavBar = ({ setIsHighScoreModalOpen, setIsSaveGameModalOpen, setIsLoadGameModalOpen }: Props) => {
   const { status, data: session } = useSession();
 
   const { gameOver } = useContext(gameDataContext);
@@ -71,7 +71,7 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
                     isModalOpen ? "cursor-not-allowed text-gray-400" : ""
                   }`}
                   onClick={() => {
-                    onHighscoreClick();
+                    setIsHighScoreModalOpen(true);
                     closeDropdown();
                   }}
                   disabled={isModalOpen}
@@ -87,7 +87,7 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
                       : ""
                   }`}
                   onClick={() => {
-                    onSaveClick();
+                    setIsSaveGameModalOpen(true);
                     closeDropdown();
                   }}
                   disabled={
@@ -105,7 +105,7 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
                       : ""
                   }`}
                   onClick={() => {
-                    onLoadClick();
+                    setIsLoadGameModalOpen(true);
                     closeDropdown();
                   }}
                   disabled={status === "unauthenticated" || isModalOpen}
@@ -139,7 +139,7 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
               className={`${
                 isModalOpen ? "cursor-not-allowed text-gray-400" : ""
               }`}
-              onClick={onHighscoreClick}
+              onClick={() => setIsHighScoreModalOpen(true)}
               disabled={isModalOpen}
             >
               Highscores
@@ -153,7 +153,7 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
                   : ""
               }`}
               onClick={() => {
-                onSaveClick();
+                setIsSaveGameModalOpen(true);
                 closeDropdown();
               }}
               disabled={status === "unauthenticated" || isModalOpen || gameOver}
@@ -169,7 +169,7 @@ const NavBar = ({ onHighscoreClick, onSaveClick, onLoadClick }: Props) => {
                   : ""
               }`}
               onClick={() => {
-                onLoadClick();
+                setIsLoadGameModalOpen(true);
                 closeDropdown();
               }}
               disabled={status === "unauthenticated" || isModalOpen}

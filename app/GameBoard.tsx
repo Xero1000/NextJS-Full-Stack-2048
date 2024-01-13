@@ -222,13 +222,6 @@ const GameBoard = () => {
     setMoveMade(true);
   };
 
-  const handleWin = () => {
-    setWin(true);
-  };
-
-  const handleLose = () => {
-    setLose(true);
-  };
 
   useEffect(() => {
     setPrevBoardData(boardData); // save board state prior to each move
@@ -297,7 +290,7 @@ const GameBoard = () => {
       if (checkBoardChange()) {
         const newBoard = generateTile(boardData);
         setBoardData(newBoard);
-        checkWinLose(newBoard, setIsModalOpen, handleWin, handleLose);
+        checkWinLose(newBoard, setIsModalOpen, setWin, setLose);
       }
       setMoveMade(false);
     }
