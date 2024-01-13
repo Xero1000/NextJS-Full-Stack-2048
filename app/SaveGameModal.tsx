@@ -53,7 +53,7 @@ const SaveGameModal = ({ isSaveGameModalOpen, setIsSaveGameModalOpen }: Props) =
 
   return (
     <dialog id="save_game_modal" className="modal" open={isSaveGameModalOpen}>
-      <div className="modal-box">
+      <div className="modal-box text-white">
         <h3 className="font-bold text-2xl text-center">Save Your Game?</h3>
         <p className="py-4 text-center">
           This will overrite any previous saved progress

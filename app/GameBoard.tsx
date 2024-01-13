@@ -1,13 +1,12 @@
-import { Grid } from "@radix-ui/themes";
 import { useContext, useEffect, useState } from "react";
 import Tile from "./Tile";
 import TileContainer from "./TileContainer";
+import useRestartGame from "./hooks/useRestartGame";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import restartGameContext from "./state-management/contexts/restartGameContext";
 import checkWinLose from "./utilities/checkWinLose";
 import generateTile from "./utilities/generateTile";
-import useRestartGame from "./hooks/useRestartGame";
 
 const GameBoard = () => {
   const { boardData, setBoardData, gameOver, setGameOver, setScore, win, setWin, lose, setLose } =
@@ -64,7 +63,7 @@ const GameBoard = () => {
                 newBoard[r][k] === newBoard[r][k + 1] &&
                 !tilesWithMerge.includes(k)
               ) {
-                newBoard[r][k] = 2048;
+                newBoard[r][k] *= 2;
                 newBoard[r][k + 1] = 0;
                 pointsGained += newBoard[r][k];
                 tilesWithMerge.push(k);
@@ -297,10 +296,8 @@ const GameBoard = () => {
   }, [moveMade]);
 
   return (
-    <Grid
-      columns="4"
-      rows="4"
-      className="border-2 border-black max-w-lg aspect-square w-10/12"
+    <div
+      className="grid grid-cols-4 border-2 border-black max-w-lg aspect-square w-10/12"
     >
       {boardData.map((row, rowIndex) =>
         row.map((col, colIndex) => (
@@ -309,7 +306,7 @@ const GameBoard = () => {
           </TileContainer>
         ))
       )}
-    </Grid>
+    </div>
   );
 };
 

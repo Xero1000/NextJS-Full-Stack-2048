@@ -1,20 +1,16 @@
 "use client";
-import { Flex } from "@radix-ui/themes";
 import EndGameModal from "./EndGameModal";
 import GameBoard from "./GameBoard";
 import Score from "./Score";
 
 export default function Home() {
   return (
-    <Flex
-      align="center"
-      direction="column"
-      className="min-h-screen pt-24"
-      gap="9"
+    <div
+      className="flex min-h-screen pt-24 items-center gap-9 flex-col bg-white"
     >
       <Score />
       <GameBoard />
       <EndGameModal />
-    </Flex>
+    </div>
   );
 }

@@ -70,7 +70,7 @@ const LoadGameModal = ({ isLoadGameModalOpen, setIsLoadGameModalOpen }: Props) =
 
   return (
     <dialog id="load_game_modal" className="modal" open={isLoadGameModalOpen}>
-      <div className="modal-box">
+      <div className="modal-box text-white">
         <h3 className="font-bold text-2xl text-center">
           Load Current Saved Game?
         </h3>

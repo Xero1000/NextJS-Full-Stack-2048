@@ -2,6 +2,7 @@
     font-size: 32px;
 }
 
+/* past 620px screen size, the tile value stops growing in font size */
 @media screen and (max-width: 620px) {
     .tile {
         font-size: 5vw
