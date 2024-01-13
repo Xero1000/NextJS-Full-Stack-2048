@@ -17,13 +17,13 @@ const GameBoard = () => {
 
   const { restartGame } = useContext(restartGameContext);
 
-  const [pointsToAdd, setPointsToAdd] = useState(0);
+  const [pointsToAdd, setPointsToAdd] = useState<number>(0);
 
   // previous state of the board
-  const [prevBoardData, setPrevBoardData] = useState(boardData);
+  const [prevBoardData, setPrevBoardData] = useState<number[][]>(boardData);
 
   // variable to track if a move was made
-  const [moveMade, setMoveMade] = useState(false);
+  const [moveMade, setMoveMade] = useState<boolean>(false);
 
   // Runs generateTile twice upon startup
   const initializeBoard = () => {
@@ -274,7 +274,7 @@ const GameBoard = () => {
         window.removeEventListener("keydown", handleKeyPress);
       };
     }
-  }, [isModalOpen, gameOver]);
+  }, [isModalOpen, gameOver, handleKeyPress]);
 
   // disables keyboard events upon player
   // winning or losing

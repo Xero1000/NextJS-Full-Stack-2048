@@ -19,8 +19,8 @@ const NavBar = ({ setIsHighScoreModalOpen, setIsSaveGameModalOpen, setIsLoadGame
   const { setRestartGame } = useContext(restartGameContext);
   const { isModalOpen } = useContext(isModalOpenContext);
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [avatarMissing, setAvatarMissing] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const [avatarMissing, setAvatarMissing] = useState<boolean>(false)
   
   const avatar = session?.user!.image!;
   

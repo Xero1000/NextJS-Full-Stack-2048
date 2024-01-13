@@ -6,9 +6,9 @@ import SaveGameModal from "./SaveGameModal";
 import LoadGameModal from "./LoadGameModal";
 
 const NavBarWithModals = () => {
-  const [isHighscoreModalOpen, setIsHighscoreModalOpen] = useState(false);
-  const [isSaveGameModalOpen, setIsSaveGameModalOpen] = useState(false)
-  const [isLoadGameModalOpen, setIsLoadGameModalOpen] = useState(false)
+  const [isHighscoreModalOpen, setIsHighscoreModalOpen] = useState<boolean>(false);
+  const [isSaveGameModalOpen, setIsSaveGameModalOpen] = useState<boolean>(false)
+  const [isLoadGameModalOpen, setIsLoadGameModalOpen] = useState<boolean>(false)
 
   return (
     <>

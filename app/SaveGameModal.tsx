@@ -18,7 +18,7 @@ interface SaveGameData {
 const SaveGameModal = ({ isSaveGameModalOpen, setIsSaveGameModalOpen }: Props) => {
   const { setIsModalOpen } = useContext(isModalOpenContext);
   const { boardData, score } = useContext(gameDataContext);
-  const [showError, setShowError] = useState(false);
+  const [showError, setShowError] = useState<boolean>(false);
 
   const saveGame = async (data: SaveGameData) => {
     await axios.post("/api/savedGame", data);

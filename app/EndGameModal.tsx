@@ -17,7 +17,7 @@ const EndGameModal = () => {
   const { score, win, lose } = useContext(gameDataContext);
   const { restartGame, setRestartGame } = useContext(restartGameContext);
 
-  const [showEndGameModal, setShowEndGameModal] = useState(false);
+  const [showEndGameModal, setShowEndGameModal] = useState<boolean>(false);
 
   // if the end game score is greater than the current lowest
   // highscore, they can submit their highscore.
