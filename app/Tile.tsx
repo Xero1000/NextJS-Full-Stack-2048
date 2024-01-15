@@ -8,7 +8,7 @@ interface Props {
 const Tile = ({ value }: Props) => {
   return (
     <div
-      className={`flex absolute justify-center items-center w-full h-full z-10 top-0 ${colorMap[value]} ${
+      className={`flex absolute justify-center items-center w-full h-full top-0 ${colorMap[value]} ${
         value === 512 || value === 2048 ? "text-white" : "text-black"
       } ${styles.tile}`}
     >

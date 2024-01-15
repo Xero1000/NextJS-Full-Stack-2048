@@ -7,12 +7,18 @@ import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import restartGameContext from "./state-management/contexts/restartGameContext";
 
 interface Props {
+  setIsInstructionsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsHighScoreModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSaveGameModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLoadGameModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NavBar = ({ setIsHighScoreModalOpen, setIsSaveGameModalOpen, setIsLoadGameModalOpen }: Props) => {
+const NavBar = ({
+  setIsInstructionsModalOpen,
+  setIsHighScoreModalOpen,
+  setIsSaveGameModalOpen,
+  setIsLoadGameModalOpen,
+}: Props) => {
   const { status, data: session } = useSession();
 
   const { gameOver } = useContext(gameDataContext);
@@ -20,21 +26,21 @@ const NavBar = ({ setIsHighScoreModalOpen, setIsSaveGameModalOpen, setIsLoadGame
   const { isModalOpen } = useContext(isModalOpenContext);
 
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const [avatarMissing, setAvatarMissing] = useState<boolean>(false)
-  
+  const [avatarMissing, setAvatarMissing] = useState<boolean>(false);
+
   const avatar = session?.user!.image!;
-  
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+
+  const openDropdown = () => {
+    setDropdownOpen(true);
   };
-  
+
   const closeDropdown = () => {
     setDropdownOpen(false);
   };
-  
+
   const handleAvatarMissing = () => {
-    setAvatarMissing(true)
-  }
+    setAvatarMissing(true);
+  };
 
   return (
     <div className="navbar bg-base-100 fixed z-10 text-white">
@@ -43,7 +49,7 @@ const NavBar = ({ setIsHighScoreModalOpen, setIsSaveGameModalOpen, setIsLoadGame
           <label
             tabIndex={0}
             className="btn btn-ghost lg:hidden"
-            onClick={toggleDropdown}
+            onClick={openDropdown}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,6 +71,17 @@ const NavBar = ({ setIsHighScoreModalOpen, setIsSaveGameModalOpen, setIsLoadGame
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
+              <li>
+                <button
+                  className={`${
+                    isModalOpen ? "cursor-not-allowed text-gray-400" : ""
+                  }`}
+                  onClick={() => setIsInstructionsModalOpen(true)}
+                  disabled={isModalOpen}
+                >
+                  Instructions
+                </button>
+              </li>
               <li>
                 <button
                   className={`${
@@ -139,6 +156,17 @@ const NavBar = ({ setIsHighScoreModalOpen, setIsSaveGameModalOpen, setIsLoadGame
               className={`${
                 isModalOpen ? "cursor-not-allowed text-gray-400" : ""
               }`}
+              onClick={() => setIsInstructionsModalOpen(true)}
+              disabled={isModalOpen}
+            >
+              Instructions
+            </button>
+          </li>
+          <li>
+            <button
+              className={`${
+                isModalOpen ? "cursor-not-allowed text-gray-400" : ""
+              }`}
               onClick={() => setIsHighScoreModalOpen(true)}
               disabled={isModalOpen}
             >
@@ -197,7 +225,11 @@ const NavBar = ({ setIsHighScoreModalOpen, setIsSaveGameModalOpen, setIsLoadGame
               <div className="avatar">
                 <div className="w-10 rounded-full">
                   {!avatarMissing ? (
-                    <img src={avatar} alt="avatar" onError={handleAvatarMissing}/>
+                    <img
+                      src={avatar}
+                      alt="avatar"
+                      onError={handleAvatarMissing}
+                    />
                   ) : (
                     <div className="flex h-10 justify-center items-center">
                       <GoQuestion size={40} />
