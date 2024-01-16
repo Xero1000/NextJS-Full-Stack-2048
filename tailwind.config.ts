@@ -15,7 +15,14 @@ const config: Config = {
       },
       spacing: {
         '128': '32rem',
-        
+      },
+      colors: {
+        'light-green': '#7ffc74',
+        'green': '#05fa19',
+        'yellow': '#FFFF00',
+        'red': '#f70202',
+        'orange': '#FFA500',
+        'blue': '#1900ff'
       }
     },
   },

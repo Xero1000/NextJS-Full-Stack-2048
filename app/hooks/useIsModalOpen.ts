@@ -9,7 +9,7 @@ const useIsModalOpen = (isConsumerModalOpen: boolean, refetch?: UseQueryResult['
       if (isConsumerModalOpen) {
         setIsModalOpen(true);
         if (refetch)
-            refetch(); // Refetch data when modal opens
+          refetch(); // Refetch data when modal opens
       } else {
         setIsModalOpen(false);
       }
