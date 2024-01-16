@@ -12,7 +12,7 @@ const GameBoard = () => {
   const { boardData, setBoardData, gameOver, setGameOver, setScore, win, setWin, lose, setLose } =
     useContext(gameDataContext);
 
-  const { isModalOpen, setIsModalOpen } = useContext(isModalOpenContext);
+  const { isModalOpen } = useContext(isModalOpenContext);
 
   const { restartGame } = useContext(restartGameContext);
 
@@ -63,7 +63,7 @@ const GameBoard = () => {
                 newBoard[r][k] === newBoard[r][k + 1] &&
                 !tilesWithMerge.includes(k)
               ) {
-                newBoard[r][k] *= 2;
+                newBoard[r][k] = 2048;
                 newBoard[r][k + 1] = 0;
                 pointsGained += newBoard[r][k];
                 tilesWithMerge.push(k);
@@ -289,7 +289,7 @@ const GameBoard = () => {
       if (checkBoardChange()) {
         const newBoard = generateTile(boardData);
         setBoardData(newBoard);
-        checkWinLose(newBoard, setIsModalOpen, setWin, setLose);
+        checkWinLose(newBoard, setWin, setLose);
       }
       setMoveMade(false);
     }

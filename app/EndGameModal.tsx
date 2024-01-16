@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import LoseMessage from "./LoseMessage";
-import WinMessage from "./WinMessage";
 import HighscoreSubmitForm from "./HighscoreSubmitForm";
+import LoseMessage from "./LoseMessage";
 import ModalHighscoreDisplay from "./ModalHighscoreDisplay";
 import Spinner from "./Spinner";
+import WinMessage from "./WinMessage";
 import { useHighscores } from "./hooks/useHighscores";
+import useRestartGame from "./hooks/useRestartGame";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
 import restartGameContext from "./state-management/contexts/restartGameContext";
-import useRestartGame from "./hooks/useRestartGame";
 
 const EndGameModal = () => {
   const { data: highscores, error, isLoading } = useHighscores();
@@ -30,6 +30,7 @@ const EndGameModal = () => {
   useEffect(() => {
     if (win || lose) {
       setShowEndGameModal(true);
+      setIsModalOpen(true)
     }
   }, [win, lose]);
 

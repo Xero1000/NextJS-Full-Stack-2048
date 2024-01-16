@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
-import gameDataContext from "./state-management/contexts/gameDataContext";
-import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import React, { useContext, useState } from "react";
 import useCloseModalTimeout from "./hooks/useCloseModalTimeout";
+import useIsModalOpen from "./hooks/useIsModalOpen";
+import gameDataContext from "./state-management/contexts/gameDataContext";
 
 interface Props {
   isSaveGameModalOpen: boolean;
@@ -16,7 +16,6 @@ interface SaveGameData {
 }
 
 const SaveGameModal = ({ isSaveGameModalOpen, setIsSaveGameModalOpen }: Props) => {
-  const { setIsModalOpen } = useContext(isModalOpenContext);
   const { boardData, score } = useContext(gameDataContext);
   const [showError, setShowError] = useState<boolean>(false);
 
@@ -40,16 +39,9 @@ const SaveGameModal = ({ isSaveGameModalOpen, setIsSaveGameModalOpen }: Props) =
     submitGameData.mutate({ serializedBoard, score })
   }
 
-  const closeErrorMessage = () => {
-    setShowError(false)
-  }
+  const closeModal = useCloseModalTimeout(setIsSaveGameModalOpen, setShowError)
 
-  const closeModal = useCloseModalTimeout(setIsSaveGameModalOpen, closeErrorMessage)
-
-  useEffect(() => {
-    if (isSaveGameModalOpen) setIsModalOpen(true);
-    else setIsModalOpen(false);
-  }, [isSaveGameModalOpen]);
+  useIsModalOpen(isSaveGameModalOpen)
 
   return (
     <dialog id="save_game_modal" className="modal" open={isSaveGameModalOpen}>

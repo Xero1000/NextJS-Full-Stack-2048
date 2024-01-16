@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
-import isModalOpenContext from "./state-management/contexts/isModalOpenContext";
-import axios from "axios";
-import gameDataContext from "./state-management/contexts/gameDataContext";
-import { useQuery } from "@tanstack/react-query";
 import { SavedGame } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import React, { useContext, useState } from "react";
 import Spinner from "./Spinner";
 import useCloseModalTimeout from "./hooks/useCloseModalTimeout";
+import useIsModalOpen from "./hooks/useIsModalOpen";
+import gameDataContext from "./state-management/contexts/gameDataContext";
 
 interface Props {
   isLoadGameModalOpen: boolean;
@@ -15,7 +15,6 @@ interface Props {
 const LoadGameModal = ({ isLoadGameModalOpen, setIsLoadGameModalOpen }: Props) => {
   const { setBoardData, setScore, setGameOver, setWin, setLose } =
     useContext(gameDataContext);
-  const { setIsModalOpen } = useContext(isModalOpenContext);
 
   const {
     data: savedGame,
@@ -30,30 +29,22 @@ const LoadGameModal = ({ isLoadGameModalOpen, setIsLoadGameModalOpen }: Props) =
 
   const [noSavedGame, setNoSavedGame] = useState(false);
 
-  useEffect(() => {
-    if (isLoadGameModalOpen) {
-      setIsModalOpen(true);
-      refetch();
-    } else {
-      setIsModalOpen(false);
-    }
-  }, [isLoadGameModalOpen]);
-
+  
   const loadGame = async () => {
     if (error) {
       return;
     }
-
+    
     // if there is no currently saved game for the user
     if (!savedGame) {
       setNoSavedGame(true);
       return;
     }
     setNoSavedGame(false);
-
+    
     const boardData = JSON.parse(savedGame.boardData);
     const score = savedGame.score;
-
+    
     setBoardData(boardData);
     setScore(score);
     setGameOver(false);
@@ -61,13 +52,11 @@ const LoadGameModal = ({ isLoadGameModalOpen, setIsLoadGameModalOpen }: Props) =
     setLose(false);
     setIsLoadGameModalOpen(false);
   };
-
-  const closeNoSaveMessage = () => {
-    setNoSavedGame(false);
-  };
-
-  const closeModal = useCloseModalTimeout(setIsLoadGameModalOpen, closeNoSaveMessage);
-
+  
+  const closeModal = useCloseModalTimeout(setIsLoadGameModalOpen, setNoSavedGame);
+  
+  useIsModalOpen(isLoadGameModalOpen, refetch)
+  
   return (
     <dialog id="load_game_modal" className="modal" open={isLoadGameModalOpen}>
       <div className="modal-box text-white">

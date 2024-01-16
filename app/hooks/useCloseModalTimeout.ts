@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
-const useCloseModalTimeout = (onClose: React.Dispatch<React.SetStateAction<boolean>>, closeMessage: () => void) => {
+const useCloseModalTimeout = (onClose: React.Dispatch<React.SetStateAction<boolean>>, closeMessage: React.Dispatch<React.SetStateAction<boolean>>) => {
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
     const closeModal = () => {
         // Keep error or no save message open as modal closes
         const id = setTimeout(() => {
-          closeMessage();
+          closeMessage(false);
         }, 1000);
         setTimeoutId(id);
         onClose(false); // close the modal
