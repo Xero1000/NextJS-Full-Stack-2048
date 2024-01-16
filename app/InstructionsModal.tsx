@@ -6,13 +6,16 @@ interface Props {
   setIsInstructionsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// Modal explaining how to play the game 
 const InstructionsModal = ({
   isInstructionsModalOpen,
   setIsInstructionsModalOpen,
 }: Props) => {
 
+  // Custom hook to tell the game a modal is open
   useIsModalOpen(isInstructionsModalOpen);
 
+  // Classes used by h4 and ul elements.
   const sharedHeadingClasses = "font-bold text-xl text-center py-5";
   const sharedUlClasses = "list-disc py-5 space-y-3";
 
@@ -93,6 +96,7 @@ const InstructionsModal = ({
             </li>
           </ul>
         </div>
+        {/* Message telling user to click outside the modal to close it */}
         <p className="text-center pt-6">(Click outside to close)</p>
       </div>
       <form method="dialog" className="modal-backdrop">

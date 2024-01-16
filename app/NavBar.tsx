@@ -13,31 +13,49 @@ interface Props {
   setIsLoadGameModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// The navigation bar at the top of the page.
 const NavBar = ({
   setIsInstructionsModalOpen,
   setIsHighScoreModalOpen,
   setIsSaveGameModalOpen,
   setIsLoadGameModalOpen,
 }: Props) => {
+  // Session hook from next-auth
   const { status, data: session } = useSession();
 
+  // CONTEXTS
+
+  // Context for game data
   const { gameOver } = useContext(gameDataContext);
+
+  // Context for restarting the game
   const { setRestartGame } = useContext(restartGameContext);
+
+  // Context for tracking if a modal is open
   const { isModalOpen } = useContext(isModalOpenContext);
 
+  // STATES
+
+  // State for tracking if dropdown menu is open
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+
+  // State for tracking if Google avatar is missing when logged in
   const [avatarMissing, setAvatarMissing] = useState<boolean>(false);
 
+  // User's Google avatar if they are logged in
   const avatar = session?.user!.image!;
 
+  // Function for opening the dropdown menu
   const openDropdown = () => {
     setDropdownOpen(true);
   };
 
+  // Function for closing hte dropdown menu
   const closeDropdown = () => {
     setDropdownOpen(false);
   };
 
+  // Function for setting avatarMissing to true
   const handleAvatarMissing = () => {
     setAvatarMissing(true);
   };
@@ -45,6 +63,9 @@ const NavBar = ({
   return (
     <div className="navbar bg-base-100 fixed z-10 text-white">
       <div className="navbar-start">
+        {/* Dropdown menu
+            Menu is hidden if screen width 
+            is greater than 1024 pixels */}
         <div className="dropdown">
           <label
             tabIndex={0}
@@ -66,11 +87,15 @@ const NavBar = ({
               />
             </svg>
           </label>
+          {/* Menu content when dropdown is open */}
+          {/* If a modal is currently open, the buttons
+              will be disabled */}
           {dropdownOpen && (
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
+              {/* Button for opening Instructions modal */}
               <li>
                 <button
                   className={`${
@@ -82,6 +107,7 @@ const NavBar = ({
                   Instructions
                 </button>
               </li>
+              {/* Button for opening Highscores modal */}
               <li>
                 <button
                   className={`${
@@ -96,6 +122,9 @@ const NavBar = ({
                   Highscores
                 </button>
               </li>
+              {/* Button for opening Save Game Modal */}
+              {/* Disabled if player is not logged in or
+                  the current game is over */}
               <li>
                 <button
                   className={`${
@@ -114,6 +143,9 @@ const NavBar = ({
                   Save Game
                 </button>
               </li>
+              {/* Button for opening Load Game modal */}
+              {/* Button is disabled if player is not logged in or 
+                  the current game is over */}
               <li>
                 <button
                   className={`${
@@ -130,6 +162,8 @@ const NavBar = ({
                   Load Game
                 </button>
               </li>
+              {/* Button to restart the game
+                  Button is disabled if a modal is currently open */}
               <li>
                 <button
                   className={`${
@@ -150,7 +184,9 @@ const NavBar = ({
         <a className="btn btn-ghost text-xl">2048</a>
       </div>
       <div className="navbar-center hidden lg:flex">
+        {/* Buttons for when browser width is greater than 1024 pixels */}
         <ul className="menu menu-horizontal px-1">
+          {/* Button for opening Instructions Modal */}
           <li>
             <button
               className={`${
@@ -162,6 +198,7 @@ const NavBar = ({
               Instructions
             </button>
           </li>
+          {/* Button for opening Highscores modal */}
           <li>
             <button
               className={`${
@@ -173,6 +210,9 @@ const NavBar = ({
               Highscores
             </button>
           </li>
+          {/* Button for opening Save Game Modal */}
+          {/* Disabled if player is not logged in or
+              the current game is over */}
           <li>
             <button
               className={`${
@@ -189,6 +229,9 @@ const NavBar = ({
               Save Game
             </button>
           </li>
+          {/* Button for opening Load Game modal */}
+          {/* Button is disabled if player is not logged in or 
+              the current game is over */}
           <li>
             <button
               className={`${
@@ -205,6 +248,8 @@ const NavBar = ({
               Load Game
             </button>
           </li>
+          {/* Button to restart the game
+              Button is disabled if a modal is currently open */}
           <li>
             <button
               className={`${
@@ -218,7 +263,11 @@ const NavBar = ({
           </li>
         </ul>
       </div>
+      {/* Right end of the navbar */}
       <div className="navbar-end">
+        {/* If player is logged in, their Google Avatar will appear
+            If their avatar can't be retrieved, a question mark icon 
+            will appear instead */}
         {status === "authenticated" && (
           <div className="dropdown dropdown-bottom dropdown-end mr-3">
             <div tabIndex={0} role="button">
@@ -238,6 +287,8 @@ const NavBar = ({
                 </div>
               </div>
             </div>
+            {/* Dropdown menu that opens when user clicks their avatar 
+                The menu will display the user's email and a Log Out button */}
             <ul
               tabIndex={0}
               className="mt-5 dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
@@ -249,6 +300,7 @@ const NavBar = ({
             </ul>
           </div>
         )}
+        {/* If user is not logged in, a Log In button will be shown */}
         {status === "unauthenticated" && (
           <Link className="btn" href="/api/auth/signin">
             Log In

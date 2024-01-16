@@ -1,5 +1,7 @@
 import React from "react";
 
+// The spinner that appears inside the
+// highscore submit button when submitting
 const ButtonSpinner = () => {
   return (
     <div

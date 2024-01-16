@@ -8,18 +8,26 @@ interface Props {
   setIsHighscoreModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// Modal that displays the current highscores
 const HighscoreModal = ({
   isHighscoreModalOpen,
   setIsHighscoreModalOpen,
 }: Props) => {
+
+  // Custom hook for fetching highscores
   const { data: highscores, error, isLoading, refetch } = useHighscores();
 
+  // Custom hook for telling the game a modal is open and for
+  // refetching the highscores. 
   useIsModalOpen(isHighscoreModalOpen, refetch);
 
   return (
-    <dialog open={isHighscoreModalOpen} id="my_modal_2" className="modal">
+    <dialog open={isHighscoreModalOpen} id="highscore_modal" className="modal">
       <div className="modal-box text-white mt-14">
         <h3 className="font-bold text-2xl text-center mb-5">Highscores</h3>
+        {/* A spinner for if highscores are being fetched,
+            An error message if highscores can't be fetched,
+            A table showing the highscores if they are successfully fetched */}
         <div className="overflow-x-auto">
           {isLoading ? (
             <div className="mt-5 text-center py-2">
@@ -51,8 +59,10 @@ const HighscoreModal = ({
             </table>
           )}
         </div>
+        {/* Message to tell player to click outside modal to close it */}
         <p className="text-center pt-6">(Click outside to close)</p>
       </div>
+      {/* Close the highscore modal */}
       <form method="dialog" className="modal-backdrop">
         <button onClick={() => setIsHighscoreModalOpen(false)}>close</button>
       </form>

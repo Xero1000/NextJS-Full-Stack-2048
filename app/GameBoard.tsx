@@ -9,13 +9,22 @@ import checkWinLose from "./utilities/checkWinLose";
 import generateTile from "./utilities/generateTile";
 
 const GameBoard = () => {
+
+  // CONTEXTS
+
+  // Context for game data
   const { boardData, setBoardData, gameOver, setGameOver, setScore, win, setWin, lose, setLose } =
     useContext(gameDataContext);
-
+   
+  // Context for tracking if a modal is open
   const { isModalOpen } = useContext(isModalOpenContext);
 
+  // Context for restarting the game
   const { restartGame } = useContext(restartGameContext);
 
+  // STATES
+
+  // New points to add to the score after each move made
   const [pointsToAdd, setPointsToAdd] = useState<number>(0);
 
   // previous state of the board
@@ -24,7 +33,9 @@ const GameBoard = () => {
   // variable to track if a move was made
   const [moveMade, setMoveMade] = useState<boolean>(false);
 
-  // Runs generateTile twice upon startup
+  // FUNCTIONS
+
+  // Runs generateTile twice on a new game
   const initializeBoard = () => {
     let newBoard = generateTile(boardData);
     newBoard = generateTile(newBoard);
@@ -41,12 +52,17 @@ const GameBoard = () => {
     return false;
   };
 
+  // Function for moving tiles left 
+  // Tiles will move left until either reaching leftmost side 
+  // or hitting another tile. 
   const moveLeft = () => {
     let pointsGained = 0;
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
+      // Create copy of the board 
       let newBoard = currentBoard.map((row) => [...row]);
+
       for (let r = 0; r < 4; r++) {
         let tilesWithMerge: number[] = [];
         for (let c = 1; c < 4; c++) {
@@ -86,6 +102,9 @@ const GameBoard = () => {
     setMoveMade(true);
   };
 
+  // Function for moving tiles right 
+  // Tiles will move right until either reaching rightmost side 
+  // or hitting another tile.
   const moveRight = () => {
     let pointsGained = 0;
     // use functional update to ensure the most current board
@@ -131,6 +150,9 @@ const GameBoard = () => {
     setMoveMade(true);
   };
 
+  // Function for moving tiles down 
+  // Tiles will move down until either reaching the bottom 
+  // or hitting another tile.
   const moveDown = () => {
     let pointsGained = 0;
     // use functional update to ensure the most current board
@@ -176,6 +198,9 @@ const GameBoard = () => {
     setMoveMade(true);
   };
 
+  // Function for moving tiles down 
+  // Tiles will move down until either reaching the top 
+  // or hitting another tile.
   const moveUp = () => {
     let pointsGained = 0;
     // use functional update to ensure the most current board
@@ -221,29 +246,8 @@ const GameBoard = () => {
     setMoveMade(true);
   };
 
-
-  useEffect(() => {
-    setPrevBoardData(boardData); // save board state prior to each move
-  }, [boardData]);
-
-  useRestartGame(restartGame)
-
-  // Calls initializeBoard if every tile is 0
-  // Run when page is loaded and when user presses restart button
-  useEffect(() => {
-    if (boardData.every((row) => row.every((cell) => cell === 0))) {
-      initializeBoard();
-    }
-  }, [boardData]);
-
-  // If tiles merge, the new points will be
-  // added to the overall score
-  useEffect(() => {
-    setScore((prevScore) => prevScore + pointsToAdd);
-    setPointsToAdd(0);
-  }, [pointsToAdd]);
-
-  //
+  // When the player presses w, a, s, or d keys, one of 
+  // the move functions will be called depending on the key
   const handleKeyPress = (e: KeyboardEvent) => {
     switch (e.key) {
       case "w": // pressing 'w' will move tiles up
@@ -263,6 +267,33 @@ const GameBoard = () => {
     }
   };
 
+  // EFFECTS
+
+  // Save board state prior to each move
+  useEffect(() => {
+    setPrevBoardData(boardData); // save board state prior to each move
+  }, [boardData]);
+
+  // Custom hook for starting a new game
+  useRestartGame(restartGame)
+
+  // Calls initializeBoard if every tile is 0
+  // Run when page is loaded and when user presses restart button
+  useEffect(() => {
+    if (boardData.every((row) => row.every((cell) => cell === 0))) {
+      initializeBoard();
+    }
+  }, [boardData]);
+
+  // If tiles merge, the new points will be
+  // added to the overall score
+  useEffect(() => {
+    setScore((prevScore) => prevScore + pointsToAdd);
+    setPointsToAdd(0);
+  }, [pointsToAdd]);
+
+  // If no modal is currently open and the game is not over, 
+  // the move keys will be enabled. 
   useEffect(() => {
     if (!isModalOpen && !gameOver) {
       // event listener for keydown event
@@ -281,7 +312,7 @@ const GameBoard = () => {
     if (win || lose) setGameOver(true);
   }, [win, lose]);
 
-  // When a move is made, if the board changed at all from the
+  // When a move key is pressed, if the board changed at all from the
   // previous board state, a new tile will be generated
   // in an empty random tile.
   useEffect(() => {

@@ -6,7 +6,11 @@ import SaveGameModal from "./SaveGameModal";
 import LoadGameModal from "./LoadGameModal";
 import InstructionsModal from "./InstructionsModal";
 
+// The Navigation Bar and the modals that will appear when 
+// their corresponding buttons on the navigation bar are clicked
 const NavBarWithModals = () => {
+
+  // States for tracking which modal is open
   const [isInstructionsModalOpen, setIsInstructionsModalOpen] = useState<boolean>(false)
   const [isHighscoreModalOpen, setIsHighscoreModalOpen] = useState<boolean>(false);
   const [isSaveGameModalOpen, setIsSaveGameModalOpen] = useState<boolean>(false)

@@ -1,4 +1,6 @@
 
+// The message displayed in EndGameModal if the player 
+// runs out of moves
 const LoseMessage = () => {
   return (
     <>

@@ -1,4 +1,6 @@
 
+// The message that appears within EndGameModal 
+// if the player manages to create a 2048 tile. 
 const WinMessage = () => {
   return (
     <>

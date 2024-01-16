@@ -16,6 +16,8 @@ interface Props {
 // highscoreNameSchema
 type HighscoreForm = z.infer<typeof highscoreNameSchema>;
 
+// Form that appears on the EndGameModal if the player gets a highscore
+// The form allows the player to submit their highscore.
 const HighscoreSubmitForm = ({ handleClose }: Props) => {
   const { score } = useContext(gameDataContext);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
@@ -59,6 +61,7 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
     };
   }, [timeoutId]);
 
+  // Function to call the mutation function
   const onSubmit = (formData: HighscoreForm) => {
     postHighscore.mutate(formData);
   };
@@ -76,6 +79,8 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
           className="input input-bordered w-full max-w-xs"
           {...register("name")}
         />
+        {/* Submit button is disabled when highscore is submitting
+            or is successfully submitted */}
         <button
           type="submit"
           className={`btn ${
@@ -89,6 +94,11 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
             postHighscore.status === "success"
           }
         >
+          {/* Submit button will display Submitting 
+              and a spinner after being clicked.
+              If submission succeeds, button will display
+              Submitted.
+              While button is not clicked, it will just say Submit */}
           {postHighscore.status === "pending" ? (
             <>
               Submitting
@@ -100,6 +110,7 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
             "Submit"
           )}
         </button>
+        {/* If the submission fails, an error message will be shown */}
         {errors.name && <p className="text-red-600">{errors.name.message}</p>}
         {postHighscore.error && (
           <p className="text-red-600">Failed to submit highscore</p>

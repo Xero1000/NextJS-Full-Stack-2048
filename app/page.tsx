@@ -3,6 +3,9 @@ import EndGameModal from "./EndGameModal";
 import GameBoard from "./GameBoard";
 import Score from "./Score";
 
+// The page the user sees showing player's score,
+// the game board, and when the game is over, the 
+// end game modal
 export default function Home() {
   return (
     <div

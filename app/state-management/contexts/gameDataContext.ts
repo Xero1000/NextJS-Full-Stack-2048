@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, createContext } from "react"
 
+// Context for holding game data
 interface gameDataContextType {
     boardData: number[][]
     score: number

@@ -1,9 +1,11 @@
-
+// Generates a new tile in a random empty position on the board
 const generateTile = (currentBoard: number[][]) => {
   
+  // copy the current board to newBoard
   let newBoard = currentBoard.map((row) => [...row]);
   let emptySpaces: { rowIndex: number; colIndex: number }[] = [];
 
+  // Each empty space is added to the array of emptySpaces
   newBoard.forEach((row, rowIndex) => {
     row.forEach((value, colIndex) => {
       if (value === 0) {
@@ -11,6 +13,10 @@ const generateTile = (currentBoard: number[][]) => {
       }
     });
   });
+
+  // If there are empty spaces, a random space is chosen from the emptySpaces array
+  // A value of either 2 or 4 is assigned to the chosen space
+  // the space is removed from the array
   if (emptySpaces.length) {
     const emptySpaceIndex = Math.floor(Math.random() * emptySpaces.length);
     const { rowIndex, colIndex } = emptySpaces[emptySpaceIndex];

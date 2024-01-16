@@ -1,5 +1,8 @@
 import React from "react";
 
+// Bigger spinner used when fetching highscore or 
+// saved game data in EndGameModal, HighscoreModal, 
+// and LoadGameModal
 const Spinner = () => {
   return (
     <div

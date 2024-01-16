@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 
-const ModalHighscoreDisplay = () => {
+// Message displaying the player's end game score within
+// the EndGameModal
+const ModalFinalscoreDisplay = () => {
   const { score } = useContext(gameDataContext);
 
   return (
@@ -9,4 +11,4 @@ const ModalHighscoreDisplay = () => {
   );
 };
 
-export default ModalHighscoreDisplay;
+export default ModalFinalscoreDisplay;

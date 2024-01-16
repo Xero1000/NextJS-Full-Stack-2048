@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 
+// Score display for the game 
 const Score = () => {
+  // context for game data
   const { score } = useContext(gameDataContext)
 
   return (

@@ -1,3 +1,4 @@
+// Colors used by the tiles for each value
 const colorMap: { [key: number]: string } = {
     2: "bg-gray-300",
     4: "bg-cyan-300",

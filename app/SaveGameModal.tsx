@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import useCloseModalTimeout from "./hooks/useCloseModalTimeout";
+import useCloseModalMessageTimeout from "./hooks/useCloseModalMessageTimeout";
 import useIsModalOpen from "./hooks/useIsModalOpen";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 
@@ -15,33 +15,48 @@ interface SaveGameData {
   score: number;
 }
 
-const SaveGameModal = ({ isSaveGameModalOpen, setIsSaveGameModalOpen }: Props) => {
+// Modal where the user can save their game data 
+const SaveGameModal = ({
+  isSaveGameModalOpen,
+  setIsSaveGameModalOpen,
+}: Props) => {
+
+  // Context for game data
   const { boardData, score } = useContext(gameDataContext);
+
+  // State for tracking whether or not to display an error message
   const [showError, setShowError] = useState<boolean>(false);
 
+  // mutation function for saving game data
   const saveGame = async (data: SaveGameData) => {
     await axios.post("/api/savedGame", data);
   };
 
+  // mutation hook for saving game data
   const submitGameData = useMutation<void, Error, SaveGameData>({
     mutationFn: saveGame,
     onSuccess: () => {
-      closeModal()
+      closeModal();
     },
     retry: 3,
     onError: () => {
-      setShowError(true)
-    }
+      setShowError(true);
+    },
   });
 
+  // Function for calling the mutate hook and sending 
+  // the board and score data. 
   const handleSave = () => {
-    const serializedBoard = JSON.stringify(boardData)
-    submitGameData.mutate({ serializedBoard, score })
-  }
+    const serializedBoard = JSON.stringify(boardData);
+    submitGameData.mutate({ serializedBoard, score });
+  };
 
-  const closeModal = useCloseModalTimeout(setIsSaveGameModalOpen, setShowError)
+  // Custom hook for closing the modal and error message
+  const closeModal = useCloseModalMessageTimeout(setIsSaveGameModalOpen, setShowError);
 
-  useIsModalOpen(isSaveGameModalOpen)
+  // Custom hook for telling the game a modal is open and for
+  // refetching the highscores.
+  useIsModalOpen(isSaveGameModalOpen);
 
   return (
     <dialog id="save_game_modal" className="modal" open={isSaveGameModalOpen}>
@@ -51,15 +66,34 @@ const SaveGameModal = ({ isSaveGameModalOpen, setIsSaveGameModalOpen }: Props) =
           This will overrite any previous saved progress
         </p>
         <div className="flex justify-center gap-4 py-3">
-          <button onClick={handleSave} className="btn" disabled={submitGameData.isPending}>
+          {/* Button displays Save Game by default
+              If game is being saved, button is disabled 
+              and displays the message Saving... */}
+          <button
+            onClick={handleSave}
+            className="btn"
+            disabled={submitGameData.isPending}
+          >
             {submitGameData.status === "pending" ? "Saving..." : "Save Game"}
           </button>
-          <button onClick={closeModal} className="btn" disabled={submitGameData.isPending}>
+          {/* Button to close modal.
+              Disabled if data is being submitted */}
+          <button
+            onClick={closeModal}
+            className="btn"
+            disabled={submitGameData.isPending}
+          >
             Cancel
           </button>
         </div>
-      {showError && <p className="text-red-600 text-center my-3">Error: Unable to save game</p>}
+        {/* If game is unable to be saved, an error message is shown */}
+        {showError && (
+          <p className="text-red-600 text-center my-3">
+            Error: Unable to save game
+          </p>
+        )}
       </div>
+      {/* Modal closes if player clicks outside */}
       <form method="dialog" className="modal-backdrop">
         <button onClick={closeModal}>Close</button>
       </form>
