@@ -1,12 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { highscoreNameSchema } from "./validationSchemas";
 import ButtonSpinner from "./ButtonSpinner";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 import { useMutation } from "@tanstack/react-query";
+import useClearTimeout from "./hooks/useClearTimeout";
 
 interface Props {
   handleClose: () => void;
@@ -53,13 +54,7 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
   // if the user closes the modal before 1 second passes after a
   // successful submission, the timeout will be cleared to avoid
   // issues with trying to update the state of an unmounted component
-  useEffect(() => {
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [timeoutId]);
+  useClearTimeout(timeoutId);
 
   // Function to call the mutation function
   const onSubmit = (formData: HighscoreForm) => {
@@ -111,9 +106,9 @@ const HighscoreSubmitForm = ({ handleClose }: Props) => {
           )}
         </button>
         {/* If the submission fails, an error message will be shown */}
-        {errors.name && <p className="text-red-600">{errors.name.message}</p>}
+        {errors.name && <p className="text-red">{errors.name.message}</p>}
         {postHighscore.error && (
-          <p className="text-red-600">Failed to submit highscore</p>
+          <p className="text-red">Failed to submit highscore</p>
         )}
       </form>
     </>

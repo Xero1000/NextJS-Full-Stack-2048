@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import useCloseModalMessageTimeout from "./hooks/useCloseModalMessageTimeout";
+import useCloseModalAndMessageTimeout from "./hooks/useCloseModalAndMessageTimeout";
 import useIsModalOpen from "./hooks/useIsModalOpen";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 
@@ -15,12 +15,11 @@ interface SaveGameData {
   score: number;
 }
 
-// Modal where the user can save their game data 
+// Modal where the user can save their game data
 const SaveGameModal = ({
   isSaveGameModalOpen,
   setIsSaveGameModalOpen,
 }: Props) => {
-
   // Context for game data
   const { boardData, score } = useContext(gameDataContext);
 
@@ -44,15 +43,18 @@ const SaveGameModal = ({
     },
   });
 
-  // Function for calling the mutate hook and sending 
-  // the board and score data. 
+  // Function for calling the mutate hook and sending
+  // the board and score data.
   const handleSave = () => {
     const serializedBoard = JSON.stringify(boardData);
     submitGameData.mutate({ serializedBoard, score });
   };
 
   // Custom hook for closing the modal and error message
-  const closeModal = useCloseModalMessageTimeout(setIsSaveGameModalOpen, setShowError);
+  const closeModal = useCloseModalAndMessageTimeout(
+    setIsSaveGameModalOpen,
+    setShowError
+  );
 
   // Custom hook for telling the game a modal is open and for
   // refetching the highscores.
@@ -88,7 +90,7 @@ const SaveGameModal = ({
         </div>
         {/* If game is unable to be saved, an error message is shown */}
         {showError && (
-          <p className="text-red-600 text-center my-3">
+          <p className="text-red text-center my-3">
             Error: Unable to save game
           </p>
         )}

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import Spinner from "./Spinner";
-import useCloseModalMessageTimeout from "./hooks/useCloseModalMessageTimeout";
+import useCloseModalAndMessageTimeout from "./hooks/useCloseModalAndMessageTimeout";
 import useIsModalOpen from "./hooks/useIsModalOpen";
 import gameDataContext from "./state-management/contexts/gameDataContext";
 
@@ -16,8 +16,7 @@ const LoadGameModal = ({
   isLoadGameModalOpen,
   setIsLoadGameModalOpen,
 }: Props) => {
-
-  // Context for the game data 
+  // Context for the game data
   const { setBoardData, setScore, setGameOver, setWin, setLose } =
     useContext(gameDataContext);
 
@@ -38,7 +37,6 @@ const LoadGameModal = ({
 
   // Function for loading the saved game data
   const loadGame = async () => {
-    
     // If error, stop
     if (error) {
       return;
@@ -58,7 +56,7 @@ const LoadGameModal = ({
     const score = savedGame.score;
 
     // Set all game data to match the loaded game data
-    // and close the modal 
+    // and close the modal
     setBoardData(boardData);
     setScore(score);
     setGameOver(false);
@@ -67,14 +65,14 @@ const LoadGameModal = ({
     setIsLoadGameModalOpen(false);
   };
 
-  // Close modal 
-  const closeModal = useCloseModalMessageTimeout(
+  // Close modal
+  const closeModal = useCloseModalAndMessageTimeout(
     setIsLoadGameModalOpen,
     setNoSavedGame
   );
 
   // Custom hook for telling the game a modal is open and for
-  // refetching the highscores. 
+  // refetching the highscores.
   useIsModalOpen(isLoadGameModalOpen, refetch);
 
   return (
@@ -91,9 +89,7 @@ const LoadGameModal = ({
             Otherwise we get an empty string
         */}
         {error ? (
-          <p className="text-center text-red-600">
-            Error. Cannot load game data
-          </p>
+          <p className="text-center text-red">Error. Cannot load game data</p>
         ) : isLoading ? (
           <>
             <p className="text-center">Fetching data. Please wait...</p>
@@ -102,7 +98,7 @@ const LoadGameModal = ({
             </div>
           </>
         ) : noSavedGame ? (
-          <p className="text-center text-red-600">No saved data found</p>
+          <p className="text-center text-red">No saved data found</p>
         ) : (
           ""
         )}

@@ -75,7 +75,7 @@ const EndGameModal = () => {
               <Spinner />
             </div>
           ) : error ? (
-            <p className="text-center text-red-600">
+            <p className="text-center text-red">
               Error fetching highscores
             </p>
           ) : showSubmit ? (
