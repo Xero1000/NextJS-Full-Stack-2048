@@ -11,6 +11,9 @@ const authOptions: NextAuthOptions = {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET!
       })
     ],
+    // Because prisma adapter is used, NextAuth will change the session
+    // strategy from 'jwt' to 'database', which doesn't work with OAuth
+    // providers such as Google, so here the strategy is set back to 'jwt'
     session: {
       strategy: 'jwt'
     },
