@@ -1,4 +1,5 @@
-"use client";
+
+import { Metadata } from "next";
 import EndGameModal from "./EndGameModal";
 import GameBoard from "./GameBoard";
 import Score from "./Score";
@@ -16,4 +17,10 @@ export default function Home() {
       <EndGameModal />
     </div>
   );
+}
+
+// Metadata for search engines 
+export const metadata: Metadata = {
+  title: "Full Stack 2048",
+  description: "Play the game 2048 with the ability to submit highscores and save and load game data."
 }

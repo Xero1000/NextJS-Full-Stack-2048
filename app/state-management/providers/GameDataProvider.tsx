@@ -3,10 +3,6 @@ import gameDataContext from "../contexts/gameDataContext";
 
 const GameDataProvider = ({ children }: PropsWithChildren) => {
   const [boardData, setBoardData] = useState([
-    // [1, 2, 1, 2],
-    // [2, 1, 2, 1],
-    // [3, 5, 3, 5],
-    // [2, 2, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],

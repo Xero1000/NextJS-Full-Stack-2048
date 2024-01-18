@@ -181,7 +181,7 @@ const NavBar = ({
             </ul>
           )}
         </div>
-        <h3 className="ml-5 font-bold text-xl">2048</h3>
+        <h3 className="ml-5 font-bold text-xl">Full Stack 2048</h3>
       </div>
       <div className="navbar-center hidden lg:flex">
         {/* Buttons for when browser width is greater than 1024 pixels */}
