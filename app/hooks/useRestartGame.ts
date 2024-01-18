@@ -25,7 +25,14 @@ const useRestartGame = (restartGame: boolean) => {
       setGameOver(false);
       setRestartGame(false);
     }
-  }, [restartGame]);
+  }, [restartGame, 
+      setBoardData, 
+      setGameOver, 
+      setIsModalOpen, 
+      setLose, 
+      setRestartGame, 
+      setScore, 
+      setWin]);
 }
 
 export default useRestartGame

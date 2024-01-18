@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useContext, useEffect, useState } from "react";
 import Tile from "./Tile";
@@ -11,13 +11,21 @@ import checkWinLose from "./utilities/checkWinLose";
 import generateTile from "./utilities/generateTile";
 
 const GameBoard = () => {
-
   // CONTEXTS
 
   // Context for game data
-  const { boardData, setBoardData, gameOver, setGameOver, setScore, win, setWin, lose, setLose } =
-    useContext(gameDataContext);
-   
+  const {
+    boardData,
+    setBoardData,
+    gameOver,
+    setGameOver,
+    setScore,
+    win,
+    setWin,
+    lose,
+    setLose,
+  } = useContext(gameDataContext);
+
   // Context for tracking if a modal is open
   const { isModalOpen } = useContext(isModalOpenContext);
 
@@ -54,15 +62,15 @@ const GameBoard = () => {
     return false;
   };
 
-  // Function for moving tiles left 
-  // Tiles will move left until either reaching leftmost side 
-  // or hitting another tile. 
+  // Function for moving tiles left
+  // Tiles will move left until either reaching leftmost side
+  // or hitting another tile.
   const moveLeft = () => {
     let pointsGained = 0;
     // use functional update to ensure the most current board
     // state is used
     setBoardData((currentBoard) => {
-      // Create copy of the board 
+      // Create copy of the board
       let newBoard = currentBoard.map((row) => [...row]);
 
       for (let r = 0; r < 4; r++) {
@@ -104,8 +112,8 @@ const GameBoard = () => {
     setMoveMade(true);
   };
 
-  // Function for moving tiles right 
-  // Tiles will move right until either reaching rightmost side 
+  // Function for moving tiles right
+  // Tiles will move right until either reaching rightmost side
   // or hitting another tile.
   const moveRight = () => {
     let pointsGained = 0;
@@ -152,8 +160,8 @@ const GameBoard = () => {
     setMoveMade(true);
   };
 
-  // Function for moving tiles down 
-  // Tiles will move down until either reaching the bottom 
+  // Function for moving tiles down
+  // Tiles will move down until either reaching the bottom
   // or hitting another tile.
   const moveDown = () => {
     let pointsGained = 0;
@@ -200,8 +208,8 @@ const GameBoard = () => {
     setMoveMade(true);
   };
 
-  // Function for moving tiles down 
-  // Tiles will move down until either reaching the top 
+  // Function for moving tiles down
+  // Tiles will move down until either reaching the top
   // or hitting another tile.
   const moveUp = () => {
     let pointsGained = 0;
@@ -248,27 +256,6 @@ const GameBoard = () => {
     setMoveMade(true);
   };
 
-  // When the player presses w, a, s, or d keys, one of 
-  // the move functions will be called depending on the key
-  const handleKeyPress = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case "w": // pressing 'w' will move tiles up
-        moveUp();
-        break;
-      case "a": // pressing 'a' will move tiles left
-        moveLeft();
-        break;
-      case "s": // pressing 's' will move tiles down
-        moveDown();
-        break;
-      case "d": // pressing 'd' will move tiles right
-        moveRight();
-        break;
-      default:
-        break;
-    }
-  };
-
   // EFFECTS
 
   // Save board state prior to each move
@@ -277,7 +264,7 @@ const GameBoard = () => {
   }, [boardData]);
 
   // Custom hook for starting a new game
-  useRestartGame(restartGame)
+  useRestartGame(restartGame);
 
   // Calls initializeBoard if every tile is 0
   // Run when page is loaded and when user presses restart button
@@ -292,11 +279,31 @@ const GameBoard = () => {
   useEffect(() => {
     setScore((prevScore) => prevScore + pointsToAdd);
     setPointsToAdd(0);
-  }, [pointsToAdd]);
+  }, [pointsToAdd, setScore]);
 
-  // If no modal is currently open and the game is not over, 
-  // the move keys will be enabled. 
+  // If no modal is currently open and the game is not over,
+  // the move keys will be enabled.
   useEffect(() => {
+    // When the player presses w, a, s, or d keys, one of
+    // the move functions will be called depending on the key
+    const handleKeyPress = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case "w": // pressing 'w' will move tiles up
+          moveUp();
+          break;
+        case "a": // pressing 'a' will move tiles left
+          moveLeft();
+          break;
+        case "s": // pressing 's' will move tiles down
+          moveDown();
+          break;
+        case "d": // pressing 'd' will move tiles right
+          moveRight();
+          break;
+        default:
+          break;
+      }
+    };
     if (!isModalOpen && !gameOver) {
       // event listener for keydown event
       window.addEventListener("keydown", handleKeyPress);
@@ -306,13 +313,13 @@ const GameBoard = () => {
         window.removeEventListener("keydown", handleKeyPress);
       };
     }
-  }, [isModalOpen, gameOver, handleKeyPress]);
+  }, [isModalOpen, gameOver]);
 
   // disables keyboard events upon player
   // winning or losing
   useEffect(() => {
     if (win || lose) setGameOver(true);
-  }, [win, lose]);
+  }, [win, lose, setGameOver]);
 
   // When a move key is pressed, if the board changed at all from the
   // previous board state, a new tile will be generated
@@ -326,12 +333,10 @@ const GameBoard = () => {
       }
       setMoveMade(false);
     }
-  }, [moveMade]);
+  }, [moveMade, boardData, checkBoardChange, setBoardData, setLose, setWin]);
 
   return (
-    <div
-      className="grid grid-cols-4 border-2 border-black max-w-lg aspect-square w-10/12"
-    >
+    <div className="grid grid-cols-4 border-2 border-black max-w-lg aspect-square w-10/12">
       {boardData.map((row, rowIndex) =>
         row.map((col, colIndex) => (
           <TileContainer key={`${rowIndex}-${colIndex}`}>

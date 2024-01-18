@@ -39,7 +39,7 @@ const EndGameModal = () => {
       setShowEndGameModal(true);
       setIsModalOpen(true)
     }
-  }, [win, lose]);
+  }, [win, lose, setIsModalOpen]);
 
   // custom hook for starting a new game
   useRestartGame(restartGame);
@@ -50,7 +50,7 @@ const EndGameModal = () => {
       setShowEndGameModal(false);
       setRestartGame(false);
     }
-  }, [restartGame]);
+  }, [restartGame, setRestartGame]);
 
   // Tells the game that no modals are open
   const handleClose = () => {

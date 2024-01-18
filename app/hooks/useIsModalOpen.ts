@@ -17,7 +17,7 @@ const useIsModalOpen = (isConsumerModalOpen: boolean, refetch?: UseQueryResult['
       } else {
         setIsModalOpen(false);
       }
-    }, [isConsumerModalOpen, refetch]);
+    }, [isConsumerModalOpen, refetch, setIsModalOpen]);
 }
 
 export default useIsModalOpen;

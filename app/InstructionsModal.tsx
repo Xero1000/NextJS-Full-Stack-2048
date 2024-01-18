@@ -73,14 +73,14 @@ const InstructionsModal = ({
               single tile.
             </li>
             <li>
-              This new tile's value will be double the value held by the merged
+              This new tile&apos;s value will be double the value held by the merged
               two tiles.
             </li>
           </ul>
           <h4 className={sharedHeadingClasses}>Score</h4>
           <ul className={sharedUlClasses}>
             <li>
-              When two tiles merge, the new value will be added to the player's
+              When two tiles merge, the new value will be added to the player&apos;s
               score.
             </li>
             <li>
