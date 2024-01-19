@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import EndGameModal from "./EndGameModal";
 import GameBoard from "./GameBoard";
 import Score from "./Score";
+import EndGameRestartMessage from "./EndGameRestartMessage";
 
 // The page the user sees showing player's score,
 // the game board, and when the game is over, the 
@@ -14,6 +15,7 @@ export default function Home() {
     >
       <Score />
       <GameBoard />
+      <EndGameRestartMessage />
       <EndGameModal />
     </div>
   );
