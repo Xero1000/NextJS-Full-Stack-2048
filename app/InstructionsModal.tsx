@@ -25,7 +25,7 @@ const InstructionsModal = ({
       className="modal"
       open={isInstructionsModalOpen}
     >
-      <div className="modal-box mt-14">
+      <div className="modal-box mt-14 text-white">
         <h3 className="font-bold text-2xl text-center py-8">How to Play</h3>
         <div className="px-5 max-h-128 overflow-y-auto">
           <h4 className={sharedHeadingClasses}>Objective</h4>
