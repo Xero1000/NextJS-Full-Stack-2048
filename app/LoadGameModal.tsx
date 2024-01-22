@@ -6,6 +6,7 @@ import Spinner from "./Spinner";
 import useCloseModalAndMessageTimeout from "./hooks/useCloseModalAndMessageTimeout";
 import useIsModalOpen from "./hooks/useIsModalOpen";
 import gameDataContext from "./state-management/contexts/gameDataContext";
+import { useSession } from "next-auth/react";
 
 interface Props {
   isLoadGameModalOpen: boolean;
@@ -16,11 +17,17 @@ const LoadGameModal = ({
   isLoadGameModalOpen,
   setIsLoadGameModalOpen,
 }: Props) => {
+
+  // Session hook from next-auth
+  const { status, data: session } = useSession();
+
   // Context for the game data
   const { setBoardData, setScore, setGameOver, setWin, setLose } =
     useContext(gameDataContext);
 
+
   // saved game data is fetched with React Query and Axios
+  // if the user is logged in.
   const {
     data: savedGame,
     isLoading,
@@ -30,6 +37,7 @@ const LoadGameModal = ({
     queryKey: ["savedGame"],
     queryFn: () =>
       axios.get<SavedGame>("/api/savedGame").then((res) => res.data),
+    enabled: status === "authenticated"
   });
 
   // State variable tracking whether or not a saved game exists
